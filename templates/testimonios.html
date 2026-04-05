@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testimonios - Herencia de Acero</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .header h1 {
+      color: #d4af37;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .header p {
+      color: #aaa;
+      font-size: 1.1rem;
+    }
+    .testimonios {
+      display: grid;
+      gap: 25px;
+    }
+    .testimonial {
+      background: rgba(212,175,55,0.1);
+      border-left: 5px solid #d4af37;
+      border-radius: 10px;
+      padding: 25px;
+      transition: all 0.3s;
+    }
+    .testimonial:hover {
+      transform: translateX(10px);
+      box-shadow: 0 5px 20px rgba(212,175,55,0.2);
+    }
+    .stars {
+      color: #d4af37;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+    .testimonial-text {
+      color: #ddd;
+      line-height: 1.8;
+      margin-bottom: 15px;
+      font-size: 1.05rem;
+      font-style: italic;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .author-avatar {
+      width: 45px;
+      height: 45px;
+      background: linear-gradient(135deg, #d4af37, #e8c547);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: #000;
+      font-weight: bold;
+    }
+    .author-info h4 {
+      color: #d4af37;
+      margin-bottom: 3px;
+    }
+    .author-info p {
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #d4af37, #e8c547);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin-bottom: 40px;
+    }
+    .btn-back:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+
+    <div class="header">
+      <h1>⭐ Testimonios de Clientes</h1>
+      <p>Lo que dicen nuestros clientes satisfechos</p>
+    </div>
+
+    <div class="testimonios">
+      <div class="testimonial">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Herencia de Acero fue la mejor decisión para nuestra boda. El equipo fue profesional, las canciones fueron exactas a lo que pedimos, y todos nuestros invitados quedaron fascinados. ¡Altamente recomendado!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">SM</div>
+          <div class="author-info">
+            <h4>Sandra Martínez</h4>
+            <p>Evento Privado - Febrero 2025</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Contratamos a Herencia de Acero para nuestra reunión corporativa y fueron increíbles. El sonido fue perfecto, la animación excelente, y el equipo muy puntual. Volveríamos a contratar sin dudarlo."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">JC</div>
+          <div class="author-info">
+            <h4>Juan Carlos López</h4>
+            <p>Evento Corporativo - Enero 2025</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Para la fiesta de cumpleaños de mi papá, Herencia de Acero fue espectacular. La música, el ambiente, todo perfecto. Mi familia no paraba de bailar toda la noche. ¡Gracias por todo!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">MR</div>
+          <div class="author-info">
+            <h4>María Rodríguez</h4>
+            <p>Evento Privado - Diciembre 2024</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Fue genial tener a Herencia de Acero en nuestro evento. Los músicos son expertos, tocaron todas nuestras canciones favoritas, y el servicio fue impeccable de principio a fin. Los recomiendo 100%."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">DF</div>
+          <div class="author-info">
+            <h4>Diego Fernández</h4>
+            <p>Evento Masivo - Noviembre 2024</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Herencia de Acero llegó puntualmente, montó todo perfecto, y la música fue espectacular. Nuestros invitados no dejaron de bailar. Definitivamente los contrataré de nuevo para próximos eventos."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AC</div>
+          <div class="author-info">
+            <h4>Andrea Campos</h4>
+            <p>Evento Privado - Octubre 2024</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonios Dinámicos de Clientes -->
+      {% if testimonios %}
+        <div style="margin-top: 40px; padding-top: 30px; border-top: 2px solid rgba(212,175,55,0.3); text-align: center; margin-bottom: 20px;">
+          <h2 style="color: #d4af37; font-size: 1.8rem; margin-bottom: 10px;">📝 Testimonios Recientes de Clientes</h2>
+          <p style="color: #aaa; margin: 0;">Experiencias compartidas por personas como tú</p>
+        </div>
+        
+        {% for testimonio in testimonios %}
+          <div class="testimonial">
+            <div class="stars">
+              {% for i in range(testimonio['calificacion']) %}★{% endfor %}{% for i in range(5 - testimonio['calificacion']) %}<span style="opacity: 0.3;">★</span>{% endfor %}
+            </div>
+            <p class="testimonial-text">"{{ testimonio['comentario'] }}"</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">{{ testimonio['nombre'][:2].upper() }}</div>
+              <div class="author-info">
+                <h4>{{ testimonio['nombre'] }}</h4>
+                <p>{% if testimonio['tipo_evento'] %}{{ testimonio['tipo_evento'] }}{% else %}Cliente Herencia de Acero{% endif %}</p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div style="text-align: center; margin-top: 50px; padding: 30px; background: rgba(212,175,55,0.1); border-radius: 10px; border: 2px solid #d4af37;">
+      <h2 style="color: #d4af37; margin-bottom: 15px;">¿Quieres que seamos parte de tu evento?</h2>
+      <p style="color: #ddd; margin-bottom: 20px;">Contáctanos hoy y crea recuerdos inolvidables con Herencia de Acero</p>
+      <a href="/" style="
+        display: inline-block;
+        padding: 14px 32px;
+        background: linear-gradient(135deg, #d4af37, #e8c547);
+        color: #000;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+      " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 15px rgba(212,175,55,0.4)';" 
+         onmouseout="this.style.transform='none';this.style.boxShadow='none';">
+        <i class="fas fa-calendar"></i> Hacer una Reserva
+      </a>
+    </div>
+  </div>
+</body>
+</html>

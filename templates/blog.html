@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog - Herencia de Acero</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .header h1 {
+      color: #d4af37;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .header p {
+      color: #aaa;
+      font-size: 1.1rem;
+    }
+    .blog-posts {
+      display: grid;
+      gap: 30px;
+    }
+    .blog-post {
+      background: rgba(212,175,55,0.1);
+      border: 2px solid #d4af37;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .blog-post:hover {
+      transform: translateX(10px);
+      box-shadow: 0 8px 25px rgba(212,175,55,0.3);
+    }
+    .blog-header {
+      background: linear-gradient(135deg, #d4af37 0%, #e8c547 100%);
+      padding: 15px 20px;
+      text-align: center;
+    }
+    .blog-date {
+      color: rgba(0,0,0,0.7);
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+    .blog-title {
+      color: #000;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+    .blog-content {
+      padding: 25px;
+    }
+    .blog-excerpt {
+      color: #ddd;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+    .blog-readmore {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #d4af37;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .blog-readmore:hover {
+      gap: 12px;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #d4af37, #e8c547);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin-bottom: 40px;
+    }
+    .btn-back:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+
+    <div class="header">
+      <h1>📰 Blog & Noticias</h1>
+      <p>Enterarte de las últimas noticias de Herencia de Acero</p>
+    </div>
+
+    <div class="blog-posts">
+      <div class="blog-post">
+        <div class="blog-header">
+          <div class="blog-date">04 de Abril de 2025</div>
+          <div class="blog-title">¡Nueva Fecha en el Calendario Mayo!</div>
+        </div>
+        <div class="blog-content">
+          <p class="blog-excerpt">
+            Tenemos nuevas fechas disponibles en mayo. Especialmente los fines de semana están abiertas para bodas, cumpleaños y eventos corporativos. No pierdas la oportunidad de reservar tu evento con Herencia de Acero...
+          </p>
+          <a href="#" class="blog-readmore">Leer más <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="blog-post">
+        <div class="blog-header">
+          <div class="blog-date">25 de Marzo de 2025</div>
+          <div class="blog-title">Presentación Especial en Festival de Música</div>
+        </div>
+        <div class="blog-content">
+          <p class="blog-excerpt">
+            Herencia de Acero fue seleccionada para participar en el Festival Regional de Música 2025. Fue una presentación espectacular con asistencia de más de 2000 personas. ¡Gracias a todos los que nos apoyaron!...
+          </p>
+          <a href="#" class="blog-readmore">Leer más <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="blog-post">
+        <div class="blog-header">
+          <div class="blog-date">10 de Marzo de 2025</div>
+          <div class="blog-title">Consejos para Seleccionar la Música Perfecta para tu Evento</div>
+        </div>
+        <div class="blog-content">
+          <p class="blog-excerpt">
+            ¿No sabes qué canciones pedir para tu evento? En este artículo compartimos nuestros mejores consejos para elegir la música adecuada según el tipo de evento, público y hora del día. ¡Aprende de nuestros expertos!...
+          </p>
+          <a href="#" class="blog-readmore">Leer más <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="blog-post">
+        <div class="blog-header">
+          <div class="blog-date">28 de Febrero de 2025</div>
+          <div class="blog-title">¿Cómo es trabajar con Herencia de Acero?</div>
+        </div>
+        <div class="blog-content">
+          <p class="blog-excerpt">
+            Testimonios exclusivos de clientes que han contratado nuestros servicios. Descubre directamente de ellos qué es lo que hace especial a Herencia de Acero y por qué nos recomiendan constantemente...
+          </p>
+          <a href="#" class="blog-readmore">Leer más <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="blog-post">
+        <div class="blog-header">
+          <div class="blog-date">15 de Febrero de 2025</div>
+          <div class="blog-title">Llevamos la Música a los Hospitales</div>
+        </div>
+        <div class="blog-content">
+          <p class="blog-excerpt">
+            Herencia de Acero realizó una actividad benéfica llevando música a los pacientes del Hospital Local. Fue una experiencia gratificante poder llevar alegría a quienes más lo necesitan...
+          </p>
+          <a href="#" class="blog-readmore">Leer más <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 50px; padding: 30px; background: rgba(212,175,55,0.1); border-radius: 10px;">
+      <h2 style="color: #d4af37; margin-bottom: 15px;">Mantente actualizado</h2>
+      <p style="color: #ddd; margin-bottom: 20px;">Síguenos en redes sociales para no perder ninguna novedad</p>
+      <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+        <a href="https://www.facebook.com/profile.php?id=61580861555027" target="_blank" style="
+          padding: 10px 20px;
+          background: rgba(212,175,55,0.2);
+          border: 2px solid #d4af37;
+          border-radius: 8px;
+          color: #d4af37;
+          text-decoration: none;
+          font-weight: 600;
+          transition: all 0.3s;
+        " onmouseover="this.style.background='#d4af37';this.style.color='#000';"
+           onmouseout="this.style.background='rgba(212,175,55,0.2)';this.style.color='#d4af37';">
+          <i class="fab fa-facebook-f"></i> Facebook
+        </a>
+        <a href="https://www.instagram.com/herencia.de.acero" target="_blank" style="
+          padding: 10px 20px;
+          background: rgba(212,175,55,0.2);
+          border: 2px solid #d4af37;
+          border-radius: 8px;
+          color: #d4af37;
+          text-decoration: none;
+          font-weight: 600;
+          transition: all 0.3s;
+        " onmouseover="this.style.background='#d4af37';this.style.color='#000';"
+           onmouseout="this.style.background='rgba(212,175,55,0.2)';this.style.color='#d4af37';">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="https://youtube.com/@herenciadeacero" target="_blank" style="
+          padding: 10px 20px;
+          background: rgba(212,175,55,0.2);
+          border: 2px solid #d4af37;
+          border-radius: 8px;
+          color: #d4af37;
+          text-decoration: none;
+          font-weight: 600;
+          transition: all 0.3s;
+        " onmouseover="this.style.background='#d4af37';this.style.color='#000';"
+           onmouseout="this.style.background='rgba(212,175,55,0.2)';this.style.color='#d4af37';">
+          <i class="fab fa-youtube"></i> YouTube
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

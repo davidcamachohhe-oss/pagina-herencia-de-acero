@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin | Herencia de Acero</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #d4af37;
+      --gold-2: #e8c547;
+      --bg: #0f0f16;
+      --panel: #151627;
+      --text: #e6e6e6;
+      --muted: #9aa0a6;
+      --danger: #dc3545;
+      --success: #28a745;
+      --warning: #ffc107;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial;
+      color: var(--text);
+      background: linear-gradient(180deg, #0b0b12 0%, #141627 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .header {
+      background: var(--panel);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand img { width: 40px; height: 40px; object-fit: contain; }
+    .brand h1 {
+      font-size: 20px;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1px solid;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .btn-logout {
+      border-color: rgba(220, 53, 69, 0.6);
+      background: rgba(220, 53, 69, 0.1);
+      color: var(--danger);
+    }
+    .btn-logout:hover { background: rgba(220, 53, 69, 0.2); }
+    .btn-confirm {
+      border-color: rgba(40, 167, 69, 0.6);
+      background: rgba(40, 167, 69, 0.1);
+      color: var(--success);
+    }
+    .btn-confirm:hover { background: rgba(40, 167, 69, 0.2); }
+    .btn-delete {
+      border-color: rgba(220, 53, 69, 0.6);
+      background: rgba(220, 53, 69, 0.1);
+      color: var(--danger);
+    }
+    .btn-delete:hover { background: rgba(220, 53, 69, 0.2); }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-card h3 {
+      font-size: 32px;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .stat-card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .section {
+      background: var(--panel);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .section h2 {
+      color: var(--gold);
+      margin-bottom: 20px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .reserva-card {
+      background: #0f1020;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .reserva-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .reserva-info h3 {
+      color: var(--gold);
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    .reserva-info p {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 2px 0;
+    }
+    .reserva-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .messages {
+      margin-bottom: 20px;
+    }
+    .msg {
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 14px;
+      border: 1px solid;
+      margin-bottom: 10px;
+    }
+    .msg.success {
+      border-color: rgba(40, 167, 69, 0.5);
+      background: rgba(40,167,69,0.1);
+      color: var(--success);
+    }
+    .msg.error {
+      border-color: rgba(220, 53, 69, 0.5);
+      background: rgba(220,53,69,0.1);
+      color: var(--danger);
+    }
+    .msg.warning {
+      border-color: rgba(255, 193, 7, 0.5);
+      background: rgba(255,193,7,0.08);
+      color: var(--warning);
+    }
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 40px;
+      font-size: 14px;
+    }
+    @media (max-width: 768px) {
+      .reserva-header { flex-direction: column; }
+      .reserva-actions { width: 100%; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <img src="{{ url_for('logo_png') }}" alt="Herencia de Acero" />
+      <h1>Panel Administrativo</h1>
+    </div>
+    <a href="{{ url_for('admin_logout') }}" class="btn btn-logout">
+      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+    </a>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="messages">
+        {% for category, message in messages %}
+          <div class="msg {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="stats">
+    <div class="stat-card">
+      <h3>{{ total }}</h3>
+      <p>Total de Reservas</p>
+    </div>
+    <div class="stat-card">
+      <h3>{{ pendientes|length }}</h3>
+      <p>Reservas Pendientes</p>
+    </div>
+    <div class="stat-card">
+      <h3>{{ confirmadas|length }}</h3>
+      <p>Reservas Confirmadas</p>
+    </div>
+    <div class="stat-card">
+      <h3>{{ canceladas|length }}</h3>
+      <p>Reservas Canceladas</p>
+    </div>
+  </div>
+
+  <!-- Exportar y acciones rápidas -->
+  <div class="section" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; padding:16px 24px;">
+    <a href="{{ url_for('admin_exportar') }}" class="btn" style="border-color:rgba(40,167,69,0.6); background:rgba(40,167,69,0.1); color:#28a745;">
+      <i class="fas fa-file-csv"></i> Exportar CSV
+    </a>
+    <a href="{{ url_for('admin_testimonios') }}" class="btn" style="border-color:rgba(212,175,55,0.6); background:rgba(212,175,55,0.1); color:#d4af37;">
+      <i class="fas fa-star"></i> Gestionar Testimonios
+    </a>
+    <a href="https://wa.me/573165315514" target="_blank" class="btn" style="border-color:rgba(37,211,102,0.6); background:rgba(37,211,102,0.1); color:#25D366;">
+      <i class="fab fa-whatsapp"></i> WhatsApp
+    </a>
+  </div>
+
+  <div class="section">
+    <h2><i class="fas fa-calendar-alt"></i> Calendario de Reservas Confirmadas</h2>
+    {% if confirmadas %}
+      <div style="display: grid; gap: 12px;">
+        {% for reserva in confirmadas %}
+          <div style="background: #0f1020; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div style="flex: 1;">
+              <div style="color: var(--gold); font-weight: 600; font-size: 16px; margin-bottom: 4px;">
+                <i class="fas fa-calendar"></i> {{ reserva['fecha_evento'] }} a las {{ reserva['hora_evento'] }}
+              </div>
+              <div style="color: var(--text); margin-bottom: 2px;">
+                <i class="fas fa-user"></i> {{ reserva['nombre'] }}
+              </div>
+              <div style="color: var(--muted); font-size: 13px;">
+                <i class="fas fa-phone"></i> {{ reserva['telefono'] }} | <i class="fas fa-envelope"></i> {{ reserva['email'] }}
+              </div>
+              {% if reserva['mensaje'] %}
+                <div style="color: var(--muted); font-size: 13px; margin-top: 4px;">
+                  <i class="fas fa-comment"></i> {{ reserva['mensaje'] }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty">
+        <i class="fas fa-calendar-times" style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;"></i>
+        <p>No hay eventos confirmados en el calendario</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="section">
+    <h2><i class="fas fa-clock"></i> Reservas Pendientes</h2>
+    {% if pendientes %}
+      {% for reserva in pendientes %}
+        <div class="reserva-card">
+          <div class="reserva-header">
+            <div class="reserva-info">
+              <h3>{{ reserva['nombre'] }}</h3>
+              <p><i class="fas fa-envelope"></i> {{ reserva['email'] }}</p>
+              <p><i class="fas fa-phone"></i> {{ reserva['telefono'] }}</p>
+              <p><i class="fas fa-calendar"></i> {{ reserva['fecha_evento'] }} a las {{ reserva['hora_evento'] }}</p>
+              {% if reserva['mensaje'] %}
+                <p><i class="fas fa-comment"></i> {{ reserva['mensaje'] }}</p>
+              {% endif %}
+            </div>
+            <div class="reserva-actions">
+              <a href="{{ url_for('admin_confirmar', id=reserva['id']) }}" class="btn btn-confirm">
+                <i class="fas fa-check"></i> Confirmar
+              </a>
+              <a href="{{ url_for('admin_cancelar', id=reserva['id']) }}" class="btn" style="border-color:rgba(255,193,7,0.6);background:rgba(255,193,7,0.1);color:#ffc107;" onclick="return confirm('¿Cancelar esta reserva?')">
+                <i class="fas fa-ban"></i> Cancelar
+              </a>
+              <a href="{{ url_for('admin_eliminar', id=reserva['id']) }}" class="btn btn-delete" onclick="return confirm('¿Eliminar esta reserva?')">
+                <i class="fas fa-trash"></i> Eliminar
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">
+        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;"></i>
+        <p>No hay reservas pendientes</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="section">
+    <h2><i class="fas fa-check-circle"></i> Reservas Confirmadas</h2>
+    {% if confirmadas %}
+      {% for reserva in confirmadas %}
+        <div class="reserva-card">
+          <div class="reserva-header">
+            <div class="reserva-info">
+              <h3>{{ reserva['nombre'] }}</h3>
+              <p><i class="fas fa-envelope"></i> {{ reserva['email'] }}</p>
+              <p><i class="fas fa-phone"></i> {{ reserva['telefono'] }}</p>
+              <p><i class="fas fa-calendar"></i> {{ reserva['fecha_evento'] }} a las {{ reserva['hora_evento'] }}</p>
+              {% if reserva['mensaje'] %}
+                <p><i class="fas fa-comment"></i> {{ reserva['mensaje'] }}</p>
+              {% endif %}
+            </div>
+            <div class="reserva-actions">
+              <a href="{{ url_for('admin_eliminar', id=reserva['id']) }}" class="btn btn-delete" onclick="return confirm('¿Eliminar esta reserva?')">
+                <i class="fas fa-trash"></i> Eliminar
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">
+        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;"></i>
+        <p>No hay reservas confirmadas</p>
+      </div>
+    {% endif %}
+  </div>
+  <div class="section">
+    <h2><i class="fas fa-ban" style="color:#ffc107;"></i> Reservas Canceladas</h2>
+    {% if canceladas %}
+      {% for reserva in canceladas %}
+        <div class="reserva-card" style="opacity:0.7;">
+          <div class="reserva-header">
+            <div class="reserva-info">
+              <h3>{{ reserva['nombre'] }}</h3>
+              <p><i class="fas fa-envelope"></i> {{ reserva['email'] }}</p>
+              <p><i class="fas fa-phone"></i> {{ reserva['telefono'] }}</p>
+              <p><i class="fas fa-calendar"></i> {{ reserva['fecha_evento'] }} a las {{ reserva['hora_evento'] }}</p>
+            </div>
+            <div class="reserva-actions">
+              <a href="{{ url_for('admin_eliminar', id=reserva['id']) }}" class="btn btn-delete" onclick="return confirm('¿Eliminar esta reserva?')">
+                <i class="fas fa-trash"></i> Eliminar
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty"><p>No hay reservas canceladas</p></div>
+    {% endif %}
+  </div>
+
+</body>
+</html>

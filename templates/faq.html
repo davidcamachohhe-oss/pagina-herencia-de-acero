@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preguntas Frecuentes - Herencia de Acero</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .header h1 {
+      color: #d4af37;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .header p {
+      color: #aaa;
+      font-size: 1.1rem;
+    }
+    .faq-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .faq-item {
+      background: rgba(212,175,55,0.1);
+      border: 2px solid #d4af37;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .faq-question {
+      padding: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(212,175,55,0.15);
+      transition: all 0.3s;
+    }
+    .faq-question:hover {
+      background: rgba(212,175,55,0.25);
+    }
+    .faq-question h3 {
+      color: #d4af37;
+      font-size: 1.1rem;
+    }
+    .faq-icon {
+      font-size: 1.5rem;
+      color: #d4af37;
+      transition: transform 0.3s;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+    }
+    .faq-answer-content {
+      padding: 20px;
+      color: #ddd;
+      line-height: 1.8;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #d4af37, #e8c547);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin-bottom: 40px;
+    }
+    .btn-back:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+
+    <div class="header">
+      <h1>❓ Preguntas Frecuentes</h1>
+      <p>Resuelve tus dudas sobre nuestros servicios</p>
+    </div>
+
+    <div class="faq-container">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>¿Qué incluye el servicio de Herencia de Acero?</h3>
+          <i class="fas fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Nuestro servicio incluye: personal musical profesional (7-11 músicos según contrates), equipo de sonido de calidad, animación en vivo con repertorio variado, montaje y desmontaje. Los eventos típicamente duran de 1-12 horas según tus necesidades.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>¿Cuál es el costo de contratar a Herencia de Acero?</h3>
+          <i class="fas fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Nuestros precios varían según el tipo de evento (privado o masivo), ubicación (Ibagué o fuera), cantidad de músicos y duración. Los precios van desde $800,000 para eventos pequeños hasta $3,900,000+ para eventos masivos en otras ciudades. Contáctanos para una cotización personalizada.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>¿Necesito hacer una reserva con anticipación?</h3>
+          <i class="fas fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Recomendamos hacer la reserva con al menos 2-4 semanas de anticipación para asegurar disponibilidad. Sin embargo, contacta con nosotros si tienes fechas próximas; podemos evaluar si disponemos de fechas.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>¿Dónde trabajan? ¿Cubren mi ciudad?</h3>
+          <i class="fas fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Trabajamos principalmente en Ibagué y la zona cafetera incluyendo ciudades como Pereira, Manizales, Armenia, Entre Ríos y municipios cercanos. Si tu ciudad no está listada, contáctanos por WhatsApp para evaluar la posibilidad.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>¿Puedo personalizar la música y repertorio?</h3>
+          <i class="fas fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            ¡Por supuesto! Puedes indicar tus canciones favoritas, géneros preferidos y estilo Musical. Nuestro equipo es muy versátil y nos adaptamos a tus gustos. Incluye todos los detalles al hacer tu reserva.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>¿Qué pasa si llueve? ¿Cancelan el evento?</h3>
+          <i class="fas fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            No cancelamos por lluvia. Solo cancelamos si hay condiciones peligrosas (tormenta eléctrica severa). Para eventos al aire libre, recomendamos tener carpa o toldo como respaldo. Habla con nosotros sobre contingencias.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>¿Cuál es la política de cancelación?</h3>
+          <i class="fas fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Si cancelas con 30+ días: devolvemos el 100% del anticipo. Si cancelas con 15-30 días: devolvemos el 50%. Si cancelas con menos de 15 días: no se devuelve el anticipo. Si nosotros cancelamos por fuerza mayor, devolvemos el anticipo completo.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>¿En cuánto tiempo recibiré confirmación?</h3>
+          <i class="fas fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Respondemos en máximo 24 horas. Si es urgente, contáctanos por WhatsApp al +57 316 5315514 y te responderemos más rápido. Nuestro equipo está disponible de lunes a domingo.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>¿Incluyen equipo de sonido? ¿Cuál es su calidad?</h3>
+          <i class="fas fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Sí, incluimos equipo de sonido profesional de buena calidad. Para eventos pequeños incluimos sistema básico. Para eventos masivos, podemos ofrecer sistemas más avanzados. Pregunta en tu reserva sobre opciones.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>¿Puedo pagar con tarjeta de crédito?</h3>
+          <i class="fas fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Sí, aceptamos todas las tarjetas de crédito y débito a través de nuestra plataforma de pagos Wompi. También aceptamos transferencia bancaria. Se requiere anticipo del 50% para confirmar tu reserva.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 50px;">
+      <h2 style="color: #d4af37; margin-bottom: 15px;">¿Aún tienes dudas?</h2>
+      <a href="https://wa.me/573165315514?text=Hola%20Herencia%20de%20Acero,%20tengo%20una%20pregunta" target="_blank" style="
+        display: inline-block;
+        padding: 14px 32px;
+        background: #25D366;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+      " onmouseover="this.style.background='#20ba5a';this.style.transform='translateY(-2px)';" 
+         onmouseout="this.style.background='#25D366';this.style.transform='none';">
+        <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function toggleFaq(element) {
+      const faqItem = element.closest('.faq-item');
+      const allFaqs = document.querySelectorAll('.faq-item');
+      
+      allFaqs.forEach(faq => {
+        if (faq !== faqItem) {
+          faq.classList.remove('active');
+        }
+      });
+      
+      faqItem.classList.toggle('active');
+    }
+  </script>
+</body>
+</html>

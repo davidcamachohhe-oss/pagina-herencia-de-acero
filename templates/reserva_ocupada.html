@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horario No Disponible - Herencia de Acero</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(26, 26, 46, 0.9);
+      border: 2px solid #dc3545;
+      border-radius: 16px;
+      padding: 50px 40px;
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(220, 53, 69, 0.2);
+      animation: slideUp 0.5s ease-out;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .icon {
+      font-size: 80px;
+      color: #dc3545;
+      margin-bottom: 20px;
+      animation: shake 0.5s ease-in-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+    h1 { color: #dc3545; font-size: 1.8rem; margin-bottom: 15px; }
+    p { color: #ddd; font-size: 1.05rem; line-height: 1.6; margin-bottom: 10px; }
+    .fecha-hora {
+      background: rgba(220, 53, 69, 0.1);
+      border: 1px solid rgba(220, 53, 69, 0.4);
+      border-radius: 8px;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .fecha-hora p { color: #fff; font-weight: 600; margin: 5px 0; }
+    .countdown {
+      color: #d4af37;
+      font-size: 1rem;
+      margin-top: 25px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 15px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #d4af37, #e8c547);
+      border-radius: 10px;
+      animation: progress 5s linear forwards;
+    }
+    @keyframes progress {
+      from { width: 100%; }
+      to { width: 0%; }
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(212, 175, 55, 0.2);
+      border: 2px solid #d4af37;
+      color: #d4af37;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 20px;
+      transition: all 0.3s;
+    }
+    .btn:hover { background: #d4af37; color: #000; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon"><i class="fas fa-calendar-times"></i></div>
+    <h1>Horario No Disponible</h1>
+    <p>Lo sentimos, ya existe una reserva para:</p>
+
+    <div class="fecha-hora">
+      <p><i class="fas fa-calendar"></i> Fecha: {{ fecha }}</p>
+      <p><i class="fas fa-clock"></i> Hora: {{ hora }}</p>
+    </div>
+
+    <p>Por favor elige otra fecha u hora para tu evento.</p>
+
+    <div class="countdown">
+      Redirigiendo en <span id="seg">5</span> segundos...
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+
+    <a href="/#reservar" class="btn">
+      <i class="fas fa-arrow-left"></i> Volver a Reservar
+    </a>
+  </div>
+
+  <script>
+    var seg = 5;
+    var interval = setInterval(function() {
+      seg--;
+      document.getElementById('seg').textContent = seg;
+      if (seg <= 0) {
+        clearInterval(interval);
+        window.location.href = '/#reservar';
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

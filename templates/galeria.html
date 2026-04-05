@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galería - Herencia de Acero</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .header h1 {
+      color: #d4af37;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .header p {
+      color: #aaa;
+      font-size: 1.1rem;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    .gallery-item {
+      background: rgba(212,175,55,0.1);
+      border: 2px solid #d4af37;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .gallery-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 25px rgba(212,175,55,0.3);
+    }
+    .gallery-image {
+      width: 100%;
+      height: 250px;
+      background: linear-gradient(135deg, #d4af37 0%, #e8c547 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .gallery-info {
+      padding: 20px;
+    }
+    .gallery-info h3 {
+      color: #d4af37;
+      margin-bottom: 8px;
+    }
+    .gallery-info p {
+      color: #ddd;
+      font-size: 0.9rem;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #d4af37, #e8c547);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin-bottom: 40px;
+    }
+    .btn-back:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+
+    <div class="header">
+      <h1>🎵 Galería de Eventos</h1>
+      <p>Mira nuestros eventos y presentaciones anteriores</p>
+    </div>
+
+    <div class="gallery">
+      <div class="gallery-item">
+        <div class="gallery-image"><i class="fas fa-images"></i></div>
+        <div class="gallery-info">
+          <h3>Evento Privado 2025</h3>
+          <p>Presentación en evento privado en Ibagué</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-image"><i class="fas fa-champagne-glasses"></i></div>
+        <div class="gallery-info">
+          <h3>Boda Masiva 2025</h3>
+          <p>Animación en celebración masiva</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-image"><i class="fas fa-microphone"></i></div>
+        <div class="gallery-info">
+          <h3>Festival Música 2024</h3>
+          <p>Participación en festival de música popular</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-image"><i class="fas fa-star"></i></div>
+        <div class="gallery-info">
+          <h3>Evento Corporativo 2024</h3>
+          <p>Presentación en evento corporativo</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-image"><i class="fas fa-music"></i></div>
+        <div class="gallery-info">
+          <h3>Concierto Benéfico 2024</h3>
+          <p>Show benéfico a favor de comunidad</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-image"><i class="fas fa-theatre-masks"></i></div>
+        <div class="gallery-info">
+          <h3>Presentación Especial 2024</h3>
+          <p>Presentación especial en zonas cafetera</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 50px;">
+      <h2 style="color: #d4af37; margin-bottom: 20px;">¿Listo para tu evento?</h2>
+      <a href="/" style="
+        display: inline-block;
+        padding: 14px 32px;
+        background: linear-gradient(135deg, #d4af37, #e8c547);
+        color: #000;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+      " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 15px rgba(212,175,55,0.4)';" 
+         onmouseout="this.style.transform='none';this.style.boxShadow='none';">
+        <i class="fas fa-calendar"></i> Hacer una Reserva
+      </a>
+    </div>
+  </div>
+</body>
+</html>

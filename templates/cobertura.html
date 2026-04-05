@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa de Cobertura - Herencia de Acero</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .header h1 {
+      color: #d4af37;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .header p {
+      color: #aaa;
+      font-size: 1.1rem;
+    }
+    .coverage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .coverage-city {
+      background: rgba(212,175,55,0.1);
+      border: 2px solid #d4af37;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .coverage-city:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(212,175,55,0.3);
+      background: rgba(212,175,55,0.2);
+    }
+    .city-name {
+      color: #d4af37;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .city-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #28a745;
+      font-size: 0.95rem;
+    }
+    .city-status i {
+      font-size: 1.2rem;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #d4af37, #e8c547);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin-bottom: 40px;
+    }
+    .btn-back:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+    }
+    .legend {
+      background: rgba(212,175,55,0.1);
+      border: 2px solid #d4af37;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    .legend h3 {
+      color: #d4af37;
+      margin-bottom: 15px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+
+    <div class="header">
+      <h1>🗺️ Mapa de Cobertura</h1>
+      <p>Ciudades donde trabajamos actualmente</p>
+    </div>
+
+    <div class="coverage-grid">
+      <div class="coverage-city">
+        <div class="city-name">🏙️ Ibagué</div>
+        <div class="city-status"><i class="fas fa-check-circle"></i> Cobertura Total</div>
+      </div>
+
+      <div class="coverage-city">
+        <div class="city-name">☕ Pereira</div>
+        <div class="city-status"><i class="fas fa-check-circle"></i> Cobertura Total</div>
+      </div>
+
+      <div class="coverage-city">
+        <div class="city-name">⛰️ Manizales</div>
+        <div class="city-status"><i class="fas fa-check-circle"></i> Cobertura Total</div>
+      </div>
+
+      <div class="coverage-city">
+        <div class="city-name">🍃 Armenia</div>
+        <div class="city-status"><i class="fas fa-check-circle"></i> Cobertura Total</div>
+      </div>
+
+      <div class="coverage-city">
+        <div class="city-name">🏡 Entre Ríos</div>
+        <div class="city-status"><i class="fas fa-check-circle"></i> Cobertura Total</div>
+      </div>
+
+      <div class="coverage-city">
+        <div class="city-name">🌄 Retiro</div>
+        <div class="city-status"><i class="fas fa-check-circle"></i> Disponible</div>
+      </div>
+
+      <div class="coverage-city">
+        <div class="city-name">🏞️ Salento</div>
+        <div class="city-status"><i class="fas fa-check-circle"></i> Disponible</div>
+      </div>
+
+      <div class="coverage-city">
+        <div class="city-name">🌳 Filandia</div>
+        <div class="city-status"><i class="fas fa-check-circle"></i> Disponible</div>
+      </div>
+
+      <div class="coverage-city">
+        <div class="city-name">📍 Cartago</div>
+        <div class="city-status"><i class="fas fa-check-circle"></i> Disponible</div>
+      </div>
+
+      <div class="coverage-city">
+        <div class="city-name">🎊 La Tebaida</div>
+        <div class="city-status"><i class="fas fa-check-circle"></i> Disponible</div>
+      </div>
+
+      <div class="coverage-city">
+        <div class="city-name">🏘️ Dosquebradas</div>
+        <div class="city-status"><i class="fas fa-check-circle"></i> Disponible</div>
+      </div>
+
+      <div class="coverage-city">
+        <div class="city-name">🌇 Santa Rosa</div>
+        <div class="city-status"><i class="fas fa-check-circle"></i> Disponible</div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <h3>¿Tu ciudad no es listad?</h3>
+      <p style="color: #ddd; margin-bottom: 15px;">Si tu ciudad no aparece en la lista, no dudes en contactarnos. Podemos evaluar la posibilidad de trabajar en tu zona.</p>
+      <a href="https://wa.me/573165315514?text=Hola%20Herencia%20de%20Acero,%20¿trabajan%20en%20mi%20ciudad?" target="_blank" style="
+        display: inline-block;
+        padding: 12px 24px;
+        background: #25D366;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+      " onmouseover="this.style.background='#20ba5a';" onmouseout="this.style.background='#25D366';">
+        <i class="fab fa-whatsapp"></i> Consultar Disponibilidad
+      </a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultar Disponibilidad - Herencia de Acero</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .header h1 {
+      color: #d4af37;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .header p {
+      color: #aaa;
+      font-size: 1.1rem;
+    }
+    .calendar-container {
+      background: rgba(212,175,55,0.1);
+      border: 2px solid #d4af37;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .calendar-nav {
+      display: flex;
+      gap: 10px;
+    }
+    .calendar-nav button {
+      padding: 10px 15px;
+      background: linear-gradient(135deg, #d4af37, #e8c547);
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .calendar-nav button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 3px 10px rgba(212,175,55,0.4);
+    }
+    .month-year {
+      color: #d4af37;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .day-header {
+      background: rgba(212,175,55,0.2);
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      color: #d4af37;
+      border-radius: 5px;
+    }
+    .day-cell {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(212,175,55,0.1);
+      border: 1px solid #d4af37;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+    .day-cell:hover:not(.empty):not(.occupied) {
+      background: rgba(40,167,69,0.3);
+      border-color: #28a745;
+    }
+    .day-cell.empty {
+      background: transparent;
+      border: none;
+      cursor: default;
+    }
+    .day-cell.occupied {
+      background: rgba(220,53,69,0.3);
+      border-color: #dc3545;
+      color: #dc3545;
+      cursor: not-allowed;
+    }
+    .day-cell.available {
+      background: rgba(40,167,69,0.2);
+      border-color: #28a745;
+      color: #28a745;
+    }
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #d4af37;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #d4af37, #e8c547);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin-bottom: 40px;
+    }
+    .btn-back:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+    }
+    .busy-list {
+      background: rgba(212,175,55,0.1);
+      border: 2px solid #d4af37;
+      border-radius: 10px;
+      padding: 25px;
+    }
+    .busy-list h3 {
+      color: #d4af37;
+      margin-bottom: 15px;
+    }
+    .busy-item {
+      background: rgba(220,53,69,0.2);
+      border-left: 4px solid #dc3545;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .busy-item strong {
+      color: #dc3545;
+    }
+    .cta {
+      text-align: center;
+      margin-top: 40px;
+      padding: 30px;
+      background: rgba(212,175,55,0.15);
+      border-radius: 10px;
+      border: 2px solid #d4af37;
+    }
+    .cta h2 {
+      color: #d4af37;
+      margin-bottom: 15px;
+    }
+    .cta a {
+      display: inline-block;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, #d4af37, #e8c547);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .cta a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+
+    <div class="header">
+      <h1>📅 Consultar Disponibilidad</h1>
+      <p>Mira nuestras fechas disponibles y ocupadas</p>
+    </div>
+
+    <div class="calendar-container">
+      <div class="calendar-header">
+        <div class="calendar-nav">
+          <button onclick="previousMonth()">&larr; Anterior</button>
+          <button onclick="nextMonth()">Siguiente &rarr;</button>
+        </div>
+        <div class="month-year" id="monthYear"></div>
+      </div>
+
+      <div class="calendar-grid" id="calendar"></div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-color" style="background: rgba(40,167,69,0.3);"></div>
+          <span>Disponible</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: rgba(220,53,69,0.3);"></div>
+          <span>Ocupado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="busy-list">
+      <h3>🔴 Fechas Ocupadas Próximas</h3>
+      <div id="busyDates">
+        <p style="color: #28a745;"><i class="fas fa-check-circle"></i> ¡Muchas fechas disponibles!</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h2>¿Encontraste una fecha que te gusta?</h2>
+      <p style="color: #ddd; margin-bottom: 20px;">Haz tu reserva ahora y asegura tu evento con Herencia de Acero</p>
+      <a href="/"><i class="fas fa-calendar"></i> Hacer una Reserva</a>
+    </div>
+  </div>
+
+  <script>
+    let currentDate = new Date();
+    const busyDates = {{ fechas_ocupadas|tojson }};
+
+    function renderCalendar() {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      
+      document.getElementById('monthYear').textContent = 
+        currentDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }).toUpperCase();
+      
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      
+      const calendar = document.getElementById('calendar');
+      calendar.innerHTML = '';
+      
+      const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+      dayNames.forEach(day => {
+        const header = document.createElement('div');
+        header.className = 'day-header';
+        header.textContent = day;
+        calendar.appendChild(header);
+      });
+      
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'day-cell empty';
+        calendar.appendChild(empty);
+      }
+      
+      for (let day = 1; day <= daysInMonth; day++) {
+        const cell = document.createElement('div');
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const isOccupied = busyDates.some(d => d.fecha === dateStr);
+        
+        cell.className = 'day-cell' + (isOccupied ? ' occupied' : ' available');
+        cell.textContent = day;
+        calendar.appendChild(cell);
+      }
+      
+      renderBusyDates();
+    }
+
+    function renderBusyDates() {
+      const busyList = document.getElementById('busyDates');
+      const today = new Date();
+      const upcomingBusy = busyDates.filter(d => new Date(d.fecha) >= today).slice(0, 5);
+      
+      if (upcomingBusy.length === 0) {
+        busyList.innerHTML = '<p style="color: #28a745;"><i class="fas fa-check-circle"></i> ¡Muchas fechas disponibles!</p>';
+      } else {
+        busyList.innerHTML = upcomingBusy.map(d => `
+          <div class="busy-item">
+            <strong>${d.fecha}</strong> a las ${d.hora}
+          </div>
+        `).join('');
+      }
+    }
+
+    function previousMonth() {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderCalendar();
+    }
+
+    function nextMonth() {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderCalendar();
+    }
+
+    renderCalendar();
+  </script>
+</body>
+</html>

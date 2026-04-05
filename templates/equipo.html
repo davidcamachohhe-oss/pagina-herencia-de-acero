@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuestro Equipo - Herencia de Acero</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .header h1 {
+      color: #d4af37;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .header p {
+      color: #aaa;
+      font-size: 1.1rem;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+    .team-member {
+      background: rgba(212,175,55,0.1);
+      border: 2px solid #d4af37;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s;
+      text-align: center;
+    }
+    .team-member:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(212,175,55,0.3);
+    }
+    .member-avatar {
+      width: 100%;
+      height: auto;
+      background: linear-gradient(135deg, #d4af37 0%, #e8c547 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .member-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .member-info {
+      padding: 20px;
+    }
+    .member-name {
+      color: #d4af37;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .member-instrument {
+      color: #aaa;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+    .member-bio {
+      color: #ddd;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #d4af37, #e8c547);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin-bottom: 40px;
+    }
+    .btn-back:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+    }
+    .story {
+      background: rgba(212,175,55,0.1);
+      border: 2px solid #d4af37;
+      border-radius: 10px;
+      padding: 30px;
+      margin-top: 50px;
+      text-align: center;
+    }
+    .story h2 {
+      color: #d4af37;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+    .story p {
+      color: #ddd;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+
+    <div class="header">
+      <h1>🎸 Nuestro Equipo</h1>
+      <p>Conoce a los músicos detrás de Herencia de Acero</p>
+    </div>
+
+    <div class="team-grid">
+      <div class="team-member">
+        <div class="member-avatar"><img src="/static/imagen1.jpg" alt="Carlos Mendoza"></div>
+        <div class="member-info">
+          <div class="member-name">Carlos Mendoza</div>
+          <div class="member-instrument">🥁 Batería</div>
+          <div class="member-bio">Baterista con 15 años de experiencia. Experto en ritmos de música popular y tropical.</div>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <div class="member-avatar"><img src="/static/imagen2.jpg" alt="Juan García"></div>
+        <div class="member-info">
+          <div class="member-name">Juan García</div>
+          <div class="member-instrument">🎸 Guitarrista</div>
+          <div class="member-bio">Guitarrista versátil con dominios en múltiples acordes. Más de 20 años tocando.</div>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <div class="member-avatar"><img src="/static/imagen3.jpg" alt="Mario Rodríguez"></div>
+        <div class="member-info">
+          <div class="member-name">Mario Rodríguez</div>
+          <div class="member-instrument">🎺 Trompeta</div>
+          <div class="member-bio">Trompetista profesional. Aporta la energía y el brillo que caracteriza a la agrupación.</div>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <div class="member-avatar"><i class="fas fa-music"></i></div>
+        <div class="member-info">
+          <div class="member-name">Luis Fernández</div>
+          <div class="member-instrument">🎵 Acordeón</div>
+          <div class="member-bio">Acordeonista virtuoso. Toca tradicionalmente folclórica con un toque moderno.</div>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <div class="member-avatar"><i class="fas fa-music"></i></div>
+        <div class="member-info">
+          <div class="member-name">Pedro Sánchez</div>
+          <div class="member-instrument">🎤 Vocalista</div>
+          <div class="member-bio">Vocalista principal con voz impactante. Lidera todas nuestras presentaciones.</div>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <div class="member-avatar"><i class="fas fa-music"></i></div>
+        <div class="member-info">
+          <div class="member-name">Raúl Torres</div>
+          <div class="member-instrument">📍 Director Musical</div>
+          <div class="member-bio">Director y coordinador. Garantiza la excelencia en cada presentación.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story">
+      <h2>🎵 Nuestra Historia</h2>
+      <p>Herencia de Acero nace de la pasión por la música de banda tradicional colombiana. Desde hace más de 20 años, nuestro equipo se ha dedicado a llevar alegría y entretenimiento a eventos en toda la región cafetera.</p>
+      <p>Cada miembro del equipo aporta su experiencia y dedicación para ofrecerte el mejor show. Somos profesionales comprometidos con la calidad y la satisfacción de nuestros clientes.</p>
+      <p style="color: #d4af37; font-weight: bold;">¡Déjanos ser parte de tu evento especial!</p>
+    </div>
+  </div>
+</body>
+</html>
