@@ -199,13 +199,14 @@ body::before {
 
 /* Header Hero */
 header {
-  background: linear-gradient(135deg, #110d1e 0%, #151834 45%, #0f1024 100%);
+  background: linear-gradient(180deg, rgba(10, 10, 16, 0.92), rgba(9, 11, 28, 0.82)), url('{{ url_for('static', filename='imagen1.jpg') }}') center/cover no-repeat;
+  background-blend-mode: overlay;
   padding: 60px 20px;
   text-align: left;
   border-bottom: 3px solid #d4af37;
   position: relative;
   overflow: hidden;
-  min-height: 420px;
+  min-height: 460px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -216,9 +217,9 @@ header::before {
   position: absolute;
   top: -20%;
   right: -20%;
-  width: 380px;
-  height: 380px;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.25), transparent 60%);
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.28), transparent 55%);
   filter: blur(40px);
 }
 
@@ -227,10 +228,10 @@ header::after {
   position: absolute;
   bottom: -40px;
   left: -40px;
-  width: 320px;
-  height: 320px;
+  width: 340px;
+  height: 340px;
   background: radial-gradient(circle, rgba(255, 255, 255, 0.08), transparent 60%);
-  filter: blur(30px);
+  filter: blur(32px);
 }
 
 .hero-content {
@@ -281,8 +282,17 @@ header h1 {
 .hero-subtitle {
   font-size: 1.35rem;
   color: #e8dbc2;
-  margin-bottom: 28px;
+  margin-bottom: 18px;
   max-width: 540px;
+}
+
+.hero-note {
+  color: #f2e7c0;
+  font-size: 1rem;
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.92;
 }
 
 .hero-buttons {
@@ -802,6 +812,7 @@ footer h3 {
       <div class="hero-badge"><i class="fas fa-guitar"></i> Banda en vivo para eventos más de 5 años</div>
       <h1>🎵 Herencia de Acero 🎵</h1>
       <p class="hero-subtitle">La mejor música de banda para encender tu celebración con tradición, energía y emoción.</p>
+      <p class="hero-note">Eventos corporativos, bodas, aniversarios y talleres con un sonido que enciende la pista.</p>
       <div class="hero-buttons">
         <a href="#reservar" class="btn-hero">Reserva ahora</a>
         <a href="/galeria" class="btn-secondary">Ver galería</a>
