@@ -873,6 +873,30 @@ def admin_rechazar_testimonio(id):
         logger.error(f"Error rechazando testimonio: {e}")
         return {'success': False, 'message': 'Error rechazando testimonio'}, 500
 
+@app.route('/ping')
+def ping():
+    return 'ok', 200
+
+def keep_alive():
+    """Hace ping a sí mismo cada 14 minutos para evitar que Render apague el servidor"""
+    import time
+    import urllib.request
+    time.sleep(60)  # esperar 1 min al arrancar
+    url = os.getenv('RENDER_EXTERNAL_URL', 'http://localhost:10000') + '/ping'
+    while True:
+        try:
+            urllib.request.urlopen(url, timeout=10)
+            logger.info(f"[keep-alive] ping OK → {url}")
+        except Exception as e:
+            logger.warning(f"[keep-alive] ping falló: {e}")
+        time.sleep(14 * 60)  # cada 14 minutos
+
+# Iniciar keep-alive solo en producción
+if os.getenv('RENDER'):
+    t = threading.Thread(target=keep_alive, daemon=True)
+    t.start()
+    logger.info("[keep-alive] hilo iniciado")
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     host = '0.0.0.0'
