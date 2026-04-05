@@ -70,7 +70,11 @@ def generar_link_calendar(reserva):
     
     try:
         fecha_str = reserva['fecha_evento'].replace('-', '')  # YYYYMMDD
-        hora_obj = datetime.strptime(reserva['hora_evento'], '%H:%M')
+        
+        hora_raw = reserva['hora_evento'] or '00:00'
+        # Soportar HH:MM y HH:MM:SS
+        hora_parts = hora_raw.strip().split(':')
+        hora_obj = datetime.strptime(f"{hora_parts[0]}:{hora_parts[1]}", '%H:%M')
         
         # Inicio
         inicio = f"{fecha_str}T{hora_obj.strftime('%H%M')}00"
@@ -555,7 +559,11 @@ def admin_confirmar(id):
             conn.commit()
             
             # Enviar correo
-            envio_exitoso, calendar_link = enviar_confirmacion(reserva)
+            try:
+                envio_exitoso, calendar_link = enviar_confirmacion(reserva)
+            except Exception as mail_err:
+                logger.error(f"Error en enviar_confirmacion: {mail_err}")
+                envio_exitoso, calendar_link = False, None
 
             # Notificación WhatsApp (link para enviar manualmente)
             wa_msg = f"Hola {reserva['nombre']}, tu reserva con Herencia de Acero para el {reserva['fecha_evento']} a las {reserva['hora_evento']} ha sido CONFIRMADA. ¡Nos vemos pronto!"
