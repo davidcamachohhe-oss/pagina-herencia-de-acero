@@ -208,7 +208,7 @@ header {
   overflow: hidden;
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
 }
 
@@ -238,20 +238,17 @@ header::after {
   width: 100%;
   max-width: 1180px;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-end;
+  justify-content: center;
   position: relative;
   z-index: 1;
-  padding: 0 40px;
+  padding: 0 40px 60px 40px;
 }
 
 .hero-copy {
-  max-width: 580px;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(6px);
-  padding: 36px 40px;
-  border-radius: 16px;
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  display: flex;
+  justify-content: center;
+  gap: 16px;
 }
 
 .hero-badge {
@@ -1596,6 +1593,8 @@ footer h3 {
 
 </body>
 </html>
+
+
 
 
 
