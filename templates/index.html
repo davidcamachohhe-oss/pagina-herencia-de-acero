@@ -247,7 +247,11 @@ header::after {
 }
 
 .hero-copy {
-  max-width: 640px;
+  max-width: 580px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  padding: 32px 36px;
+  border-radius: 16px;
 }
 
 .hero-badge {
@@ -266,16 +270,16 @@ header::after {
 }
 
 header h1 {
-  font-size: 4.2rem;
-  line-height: 1;
+  font-size: 3.8rem;
+  line-height: 1.1;
   color: transparent;
   background: linear-gradient(90deg, #f7e76b 0%, #ffffff 45%, #d4af37 100%);
   -webkit-background-clip: text;
   background-clip: text;
   font-weight: 800;
-  text-shadow: 0 14px 35px rgba(0, 0, 0, 0.25);
+  text-shadow: none;
   margin-bottom: 18px;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   text-align: left;
 }
 
@@ -619,8 +623,18 @@ footer h3 {
 /* Responsive */
 @media (max-width: 768px) {
   header h1 {
-    font-size: 2rem;
-  }
+  font-size: 3.8rem;
+  line-height: 1.1;
+  color: transparent;
+  background: linear-gradient(90deg, #f7e76b 0%, #ffffff 45%, #d4af37 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-weight: 800;
+  text-shadow: none;
+  margin-bottom: 18px;
+  letter-spacing: -0.02em;
+  text-align: left;
+}
   
   h2 {
     font-size: 1.8rem;
@@ -823,9 +837,6 @@ footer h3 {
       </div>
     </div>
   </div>
-  <div class="hero-decor note-1">🎷</div>
-  <div class="hero-decor note-2">🎺</div>
-  <div class="hero-decor note-3">🎶</div>
 </header>
 
 <main>
@@ -1593,6 +1604,7 @@ footer h3 {
 
 </body>
 </html>
+
 
 
 
