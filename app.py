@@ -1,5 +1,5 @@
 # Código principal de Flask con dashboard, reservas y correo
-from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory, send_file
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file
 from flask_mail import Mail, Message
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -39,19 +39,8 @@ DATA_DIR = os.path.join(BASE_DIR, 'data')
 os.makedirs(STATIC_DIR, exist_ok=True)
 os.makedirs(DATA_DIR, exist_ok=True)
 
-# Mover logo si existe en la raíz
-root_logo = os.path.join(BASE_DIR, 'logo.png')
-static_logo = os.path.join(STATIC_DIR, 'logo.png')
-try:
-    if os.path.exists(root_logo) and not os.path.exists(static_logo):
-        os.replace(root_logo, static_logo)
-        logger.info("Logo movido a static/")
-except Exception as e:
-    logger.warning(f'No se pudo mover logo.png a static/: {e}')
 
-logger.info(f"[BOOT] BASE_DIR={BASE_DIR}")
-logger.info(f"[BOOT] STATIC_DIR={STATIC_DIR}")
-logger.info(f"[BOOT] logo.png exists in static: {os.path.exists(static_logo)}")
+
 
 # Inicializar correo
 mail = Mail(app)
@@ -190,7 +179,7 @@ def enviar_confirmacion(reserva):
 if not os.path.exists(DB_FILE):
     conn = get_db()
     # Tabla de reservas
-    conn.execute("""CREATE TABLE reservas(
+    conn.execute("""CREATE TABLE IF NOT EXISTS reservas(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nombre TEXT NOT NULL,
         email TEXT NOT NULL,
@@ -214,17 +203,50 @@ if not os.path.exists(DB_FILE):
         ip_address TEXT,
         FOREIGN KEY (reserva_id) REFERENCES reservas(id)
     )""")
+
+    # Tabla de testimonios
+    conn.execute("""CREATE TABLE IF NOT EXISTS testimonios (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT NOT NULL,
+        email TEXT NOT NULL,
+        tipo_evento TEXT,
+        calificacion INTEGER DEFAULT 5,
+        comentario TEXT NOT NULL,
+        estado TEXT DEFAULT 'pendiente',
+        creado DATETIME DEFAULT CURRENT_TIMESTAMP,
+        aprobado DATETIME
+    )""")
     
     conn.commit()
     conn.close()
     logger.info("Base de datos creada con tablas de auditoría")
+else:
+    # Asegurar que todas las tablas existan aunque la DB ya esté creada
+    conn = get_db()
+    conn.execute("""CREATE TABLE IF NOT EXISTS testimonios (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT NOT NULL,
+        email TEXT NOT NULL,
+        tipo_evento TEXT,
+        calificacion INTEGER DEFAULT 5,
+        comentario TEXT NOT NULL,
+        estado TEXT DEFAULT 'pendiente',
+        creado DATETIME DEFAULT CURRENT_TIMESTAMP,
+        aprobado DATETIME
+    )""")
+    conn.execute("""CREATE TABLE IF NOT EXISTS audit_log (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        accion TEXT NOT NULL,
+        usuario TEXT,
+        reserva_id INTEGER,
+        detalles TEXT,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+        ip_address TEXT,
+        FOREIGN KEY (reserva_id) REFERENCES reservas(id)
+    )""")
+    conn.commit()
+    conn.close()
 
-@app.route('/logo.png')
-def logo_png():
-    try:
-        return send_from_directory(STATIC_DIR, 'logo.png')
-    except Exception as e:
-        return f"Logo error: {e}", 500
 
 @app.route('/')
 def index():
