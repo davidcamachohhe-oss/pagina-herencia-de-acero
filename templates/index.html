@@ -199,14 +199,14 @@ body::before {
 
 /* Header Hero */
 header {
-  background: linear-gradient(180deg, rgba(10, 10, 16, 0.35), rgba(9, 11, 28, 0.45)), url('{{ url_for("static", filename="imagen1.jpg") }}') center top/cover no-repeat;
+  background: linear-gradient(180deg, rgba(10, 10, 16, 0.55), rgba(9, 11, 28, 0.65)), url('{{ url_for("static", filename="imagen1.jpg") }}') center center/contain no-repeat;
   background-color: #0a0a10;
   padding: 60px 20px;
   text-align: left;
   border-bottom: 3px solid #d4af37;
   position: relative;
   overflow: hidden;
-  min-height: 90vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1593,6 +1593,8 @@ footer h3 {
 
 </body>
 </html>
+
+
 
 
 
