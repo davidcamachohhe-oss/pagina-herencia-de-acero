@@ -76,7 +76,11 @@ def generar_link_calendar(reserva):
         inicio = f"{fecha_str}T{hora_obj.strftime('%H%M')}00"
         
         # Fin (sumar 2 horas por defecto)
-        horas = int(reserva.get('horas', 2))
+        horas = 2
+        try:
+            horas = int(reserva['horas'])
+        except (KeyError, TypeError, ValueError):
+            pass
         fin_dt = hora_obj + timedelta(hours=horas)
         fin = f"{fecha_str}T{fin_dt.strftime('%H%M')}00"
         
