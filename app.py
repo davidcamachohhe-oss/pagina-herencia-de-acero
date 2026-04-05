@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_mail import Mail, Message
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-import sqlite3, os, logging
+import sqlite3, os, logging, threading
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from config import get_config
@@ -174,6 +174,17 @@ def enviar_confirmacion(reserva):
     except Exception as e:
         logger.error(f"Error enviando correo: {e}")
         return False, None
+
+def enviar_confirmacion_async(reserva):
+    """Envía el correo en un hilo separado para no bloquear el worker"""
+    def _enviar():
+        try:
+            with app.app_context():
+                enviar_confirmacion(reserva)
+        except Exception as e:
+            logger.error(f"Error en hilo de correo: {e}")
+    t = threading.Thread(target=_enviar, daemon=True)
+    t.start()
 
 # Crear DB si no existe con tablas de auditoría
 if not os.path.exists(DB_FILE):
@@ -386,11 +397,10 @@ def reservar():
         finally:
             conn.close()
 
-        # Enviar correo de confirmación automático
+        # Enviar correo de confirmación en background (no bloquea)
         try:
-            envio_exitoso, calendar_link = enviar_confirmacion(reserva)
-            if envio_exitoso:
-                registrar_audit('EMAIL_CONFIRMACION', 'usuario', reserva_id, f"Email enviado a {email}", request.remote_addr)
+            enviar_confirmacion_async(reserva)
+            registrar_audit('EMAIL_CONFIRMACION', 'usuario', reserva_id, f"Email enviado a {email}", request.remote_addr)
         except Exception as e:
             logger.warning(f"No se pudo enviar email automático: {e}")
         
@@ -580,12 +590,13 @@ def admin_confirmar(id):
             conn.execute("UPDATE reservas SET estado='confirmada', actualizado=datetime('now') WHERE id=?", (id,))
             conn.commit()
             
-            # Enviar correo
+            # Enviar correo en background (no bloquea el worker)
             try:
-                envio_exitoso, calendar_link = enviar_confirmacion(reserva)
+                enviar_confirmacion_async(reserva)
+                envio_exitoso = True
             except Exception as mail_err:
                 logger.error(f"Error en enviar_confirmacion: {mail_err}")
-                envio_exitoso, calendar_link = False, None
+                envio_exitoso = False
 
             # Notificación WhatsApp (link para enviar manualmente)
             wa_msg = f"Hola {reserva['nombre']}, tu reserva con Herencia de Acero para el {reserva['fecha_evento']} a las {reserva['hora_evento']} ha sido CONFIRMADA. ¡Nos vemos pronto!"
