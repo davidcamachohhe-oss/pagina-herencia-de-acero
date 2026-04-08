@@ -937,10 +937,115 @@ footer h3 {
     <div id="repertorio" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px); border: 2px solid #d4af37; border-radius: 15px; padding: 40px; margin-bottom: 40px; box-shadow: 0 8px 32px rgba(212, 175, 55, 0.15);">
       <h2 style="text-align: center; margin-bottom: 10px;">🎵 Nuestro Repertorio y Presentaciones <span style="color: #9773da;"></span>𝄞</span></h2>
       <p style="text-align: center; color: #bbb; margin-bottom: 30px; font-style: italic;">Escucha algunos de nuestros temas y mira nuestras presentaciones</p>
-      <div style="text-align: center; padding: 40px 20px;">
-        <i class="fas fa-film" style="font-size: 3rem; color: #d4af37; margin-bottom: 20px; display: block;"></i>
-        <p style="color: #d4af37; font-size: 1.2rem; font-weight: 600; margin-bottom: 10px;">Nuevos videos próximamente</p>
-        <p style="color: #bbb; font-size: 0.95rem;">Estamos preparando contenido de mejor calidad para ti.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='TEREQUE.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Tereque</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='FESTIVAL MÚSICA COLOMBIANA.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Festival Música Colombiana</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='CASA CORONA.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Casa Corona</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='DÍA DE LA MUJER.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Día de la Mujer</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='INAUGURACIÓN FUSAGASUGÁ.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Inauguración Fusagasugá</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='LA ULTIMA CANCIÓN.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 La Última Canción</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='RADIO1.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Radio 1</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='DUELE.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Duele</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='SI TE PUDIERA MENTIR.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Si Te Pudiera Mentir</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='SWEET DREAMS.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Sweet Dreams</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='SOLO QUISIERA.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Solo Quisiera</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='ANHELANDOTE.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Anhelandote</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='ENSAMBLE DE VOCES.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Ensamble de Voces</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='SE MORIR.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Se Morir</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='TAN SOLO PALABRAS.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Tan Solo Palabras</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='GITANA.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Gitana</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='PECADO MORTAL.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Pecado Mortal</p>
+        </div>
+        <div style="background: #0f1020; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; overflow: hidden;">
+          <video controls style="width: 100%; display: block;" preload="metadata">
+            <source src="{{ url_for('static', filename='JUNTOS.mov') }}" type="video/mp4 video/quicktime">
+          </video>
+          <p style="color: #d4af37; text-align: center; padding: 10px; font-weight: 600; margin: 0;">🎵 Juntos</p>
+        </div>
       </div>
     </div>
 
@@ -1538,6 +1643,8 @@ footer h3 {
 
 </body>
 </html>
+
+
 
 
 
