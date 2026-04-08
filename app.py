@@ -102,33 +102,25 @@ def registrar_audit(accion, usuario, reserva_id, detalles='', ip_address=''):
 
 def enviar_confirmacion(reserva):
     try:
+        import resend
         calendar_link = generar_link_calendar(reserva)
-        
-        mail_user = app.config.get('MAIL_USERNAME') or os.getenv('MAIL_USERNAME')
-        if not mail_user:
-            logger.error("MAIL_USERNAME no configurado")
+
+        resend.api_key = os.getenv('RESEND_API_KEY')
+        if not resend.api_key:
+            logger.error("RESEND_API_KEY no configurado")
             return False, None
 
-        msg = Message(
-            subject='✓ Reserva Confirmada - Herencia de Acero',
-            sender=mail_user,
-            recipients=[reserva['email']]
-        )
-        msg.html = f"""
+        html_body = f"""
         <html>
             <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
                 <div style="background: linear-gradient(135deg, #d4af37 0%, #e8c547 100%); padding: 20px; text-align: center;">
                     <h1 style="color: #000; margin: 0;">🎵 HERENCIA DE ACERO 🎵</h1>
                     <p style="color: #000; margin: 5px 0 0 0; font-style: italic;">Agrupación de música de banda</p>
                 </div>
-                
                 <div style="padding: 30px; background: #f9f9f9;">
                     <h2 style="color: #d4af37;">¡Reserva Confirmada!</h2>
-                    
                     <p>Hola <strong>{reserva['nombre']}</strong>,</p>
-                    
                     <p>Tu reserva para <strong>Herencia de Acero</strong> ha sido <strong style="color: #d4af37;">CONFIRMADA</strong>.</p>
-                    
                     <div style="background: #fff; border: 2px solid #d4af37; border-radius: 8px; padding: 20px; margin: 20px 0;">
                         <h3 style="color: #d4af37; margin-top: 0;">Detalles de tu Reserva:</h3>
                         <p><strong>📅 Fecha:</strong> {reserva['fecha_evento']}</p>
@@ -136,45 +128,26 @@ def enviar_confirmacion(reserva):
                         <p><strong>📞 Teléfono:</strong> {reserva['telefono']}</p>
                         {f'<p><strong>📝 Detalles:</strong> {reserva["mensaje"]}</p>' if reserva['mensaje'] else ''}
                     </div>
-
-                    {f'''
-                    <div style="background: #fff; border: 2px solid #4285f4; border-radius: 8px; padding: 20px; margin: 20px 0; text-align: center;">
-                        <h3 style="color: #4285f4; margin-top: 0;">📅 Agregar a Google Calendar</h3>
-                        <p style="margin-bottom: 15px;">Haz clic para agregar este evento a tu calendario:</p>
-                        <a href="{calendar_link}" target="_blank" 
-                           style="background: #4285f4; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
-                            📅 Agregar a Google Calendar
-                        </a>
-                    </div>
-                    ''' if calendar_link else ''}
-                    
-                    <p>¡Gracias por confiar en <strong>Herencia de Acero</strong>! Nos complace mucho confirmar tu evento.</p>
-                    
+                    {f'<p><a href="{calendar_link}" style="background:#4285f4;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;">📅 Agregar a Google Calendar</a></p>' if calendar_link else ''}
+                    <p>¡Gracias por confiar en <strong>Herencia de Acero</strong>!</p>
                     <hr style="border: 1px solid #ddd;">
-                    
-                    <h3 style="color: #d4af37;">Datos de Contacto:</h3>
-                    <p>
-                        📞 <strong>Teléfono:</strong> <a href="tel:+573165315514" style="color: #d4af37; text-decoration: none;">+57 316 5315514</a><br>
-                        💬 <strong>WhatsApp:</strong> <a href="https://wa.me/573165315514" style="color: #d4af37; text-decoration: none;">+57 316 5315514</a>
-                    </p>
-                    
-                    <h3 style="color: #d4af37;">Síguenos en Redes Sociales:</h3>
-                    <div style="margin: 15px 0;">
-                        <a href="https://web.facebook.com/people/Herencia-de-Acero/61580861555027/" style="color: #d4af37; text-decoration: none; margin: 0 10px;">📘 Facebook</a>
-                        <a href="https://instagram.com/herenciadeacero" style="color: #d4af37; text-decoration: none; margin: 0 10px;">📷 Instagram</a>
-                        <a href="https://youtube.com/@herenciadeacero" style="color: #d4af37; text-decoration: none; margin: 0 10px;">🎥 YouTube</a>
-                        <a href="https://tiktok.com/@herenciadeacero" style="color: #d4af37; text-decoration: none; margin: 0 10px;">🎵 TikTok</a>
-                    </div>
+                    <p>📞 <a href="tel:+573165315514" style="color:#d4af37;">+57 316 5315514</a> &nbsp;|&nbsp;
+                       💬 <a href="https://wa.me/573165315514" style="color:#d4af37;">WhatsApp</a></p>
                 </div>
-                
                 <div style="background: #1a1a2e; color: #999; padding: 20px; text-align: center; font-size: 12px;">
-                    <p style="margin: 0;">&copy; 2026 Herencia de Acero - Banda de Música Popular</p>
-                    <p style="margin: 5px 0 0 0;">Todos los derechos reservados.</p>
+                    <p>&copy; 2026 Herencia de Acero - Banda de Música Popular</p>
                 </div>
             </body>
         </html>
         """
-        mail.send(msg)
+
+        resend.Emails.send({
+            "from": "Herencia de Acero <onboarding@resend.dev>",
+            "to": [reserva['email']],
+            "subject": "✓ Reserva Confirmada - Herencia de Acero",
+            "html": html_body,
+        })
+        logger.info(f"Correo enviado a {reserva['email']} via Resend")
         return True, calendar_link
     except Exception as e:
         logger.error(f"Error enviando correo: {e}")
@@ -185,9 +158,6 @@ def enviar_confirmacion_async(reserva):
     def _enviar():
         try:
             with app.app_context():
-                # Recargar credenciales en tiempo de ejecución
-                app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', app.config.get('MAIL_USERNAME'))
-                app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD', app.config.get('MAIL_PASSWORD'))
                 enviar_confirmacion(reserva)
         except Exception as e:
             logger.error(f"Error en hilo de correo: {e}")
