@@ -104,9 +104,14 @@ def enviar_confirmacion(reserva):
     try:
         calendar_link = generar_link_calendar(reserva)
         
+        mail_user = app.config.get('MAIL_USERNAME') or os.getenv('MAIL_USERNAME')
+        if not mail_user:
+            logger.error("MAIL_USERNAME no configurado")
+            return False, None
+
         msg = Message(
             subject='✓ Reserva Confirmada - Herencia de Acero',
-            sender=app.config['MAIL_USERNAME'],
+            sender=mail_user,
             recipients=[reserva['email']]
         )
         msg.html = f"""
@@ -180,6 +185,9 @@ def enviar_confirmacion_async(reserva):
     def _enviar():
         try:
             with app.app_context():
+                # Recargar credenciales en tiempo de ejecución
+                app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', app.config.get('MAIL_USERNAME'))
+                app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD', app.config.get('MAIL_PASSWORD'))
                 enviar_confirmacion(reserva)
         except Exception as e:
             logger.error(f"Error en hilo de correo: {e}")
