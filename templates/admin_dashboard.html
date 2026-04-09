@@ -291,7 +291,8 @@
               {% endif %}
             </div>
             <div class="reserva-actions">
-              <a href="{{ url_for('admin_confirmar', id=reserva['id']) }}" class="btn btn-confirm">
+              <a href="{{ url_for('admin_confirmar', id=reserva['id']) }}" class="btn btn-confirm"
+                 onclick="enviarCorreoYConfirmar(event, this, '{{ reserva['email'] }}', '{{ reserva['nombre'] }}', '{{ reserva['fecha_evento'] }}', '{{ reserva['hora_evento'] }}', '{{ reserva['telefono'] }}', '{{ (reserva['mensaje'] or 'Sin detalles')|replace("'", "") }}')">
                 <i class="fas fa-check"></i> Confirmar
               </a>
               <a href="{{ url_for('admin_cancelar', id=reserva['id']) }}" class="btn" style="border-color:rgba(255,193,7,0.6);background:rgba(255,193,7,0.1);color:#ffc107;" onclick="return confirm('¿Cancelar esta reserva?')">
@@ -367,5 +368,31 @@
     {% endif %}
   </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+emailjs.init("wYJrj4KbK3MTFXNLI");
+
+function enviarCorreoYConfirmar(e, link, email, nombre, fecha, hora, telefono, detalles) {
+  e.preventDefault();
+  var url = link.href;
+  var calendarLink = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Evento+Herencia+de+Acero&dates=" + fecha.replace(/-/g,'') + "T" + hora.replace(':','') + "00/" + fecha.replace(/-/g,'') + "T" + hora.replace(':','') + "00";
+
+  emailjs.send("service_jqrwp5e", "template_j93enjc", {
+    email_cliente: email,
+    nombre: nombre,
+    fecha: fecha,
+    hora: hora,
+    telefono: telefono,
+    detalles: detalles,
+    calendar_link: calendarLink
+  }).then(function() {
+    console.log('Correo enviado a ' + email);
+  }, function(error) {
+    console.log('Error correo:', error);
+  }).finally(function() {
+    window.location.href = url;
+  });
+}
+</script>
 </body>
 </html>
