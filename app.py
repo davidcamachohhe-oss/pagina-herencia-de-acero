@@ -586,10 +586,13 @@ def admin_confirmar(id):
             
             if envio_exitoso:
                 logger.info(f"Reserva confirmada y correo enviado: ID={id}")
-                flash(f'✓ Reserva de {reserva["nombre"]} confirmada y correo enviado | <a href="{wa_link}" target="_blank" style="color:#25D366;">📱 Enviar WhatsApp</a>', 'success')
+                flash(f'✓ Reserva de {reserva["nombre"]} confirmada', 'success')
             else:
                 logger.warning(f"Reserva confirmada pero correo falló: ID={id}")
-                flash(f'✓ Reserva de {reserva["nombre"]} confirmada | <a href="{wa_link}" target="_blank" style="color:#25D366;">📱 Enviar WhatsApp</a>', 'warning')
+                flash(f'✓ Reserva de {reserva["nombre"]} confirmada', 'success')
+            else:
+                logger.warning(f"Reserva confirmada pero correo falló: ID={id}")
+                flash(f'✓ Reserva de {reserva["nombre"]} confirmada', 'success')
         
         conn.close()
     except Exception as e:
