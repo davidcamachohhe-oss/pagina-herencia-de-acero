@@ -590,9 +590,6 @@ def admin_confirmar(id):
             else:
                 logger.warning(f"Reserva confirmada pero correo falló: ID={id}")
                 flash(f'✓ Reserva de {reserva["nombre"]} confirmada', 'success')
-            else:
-                logger.warning(f"Reserva confirmada pero correo falló: ID={id}")
-                flash(f'✓ Reserva de {reserva["nombre"]} confirmada', 'success')
         
         conn.close()
     except Exception as e:
