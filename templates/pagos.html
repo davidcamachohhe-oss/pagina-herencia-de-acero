@@ -5,6 +5,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 <title>Información de Pago - Herencia de Acero</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 * {
   margin: 0;
@@ -467,6 +468,28 @@ function pagarTarjeta() {
   window.open(wompiUrl, '_blank');
   alert('Se abrirá la ventana de pago con tarjeta. Después de completar el pago, recibirás confirmación automática.');
 }
+
+// Enviar correo de confirmación via EmailJS
+(function() {
+  var fecha = "{{ reserva['fecha_evento'] }}";
+  var hora = "{{ reserva['hora_evento'] }}";
+  var calendarLink = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Evento+Herencia+de+Acero&dates=" + fecha.replace(/-/g,'') + "T" + hora.replace(':','') + "00/" + fecha.replace(/-/g,'') + "T" + hora.replace(':','') + "00";
+
+  emailjs.init("wYJrj4KbK3MTFXNLI");
+  emailjs.send("service_jqrwp5e", "template_j93enjc", {
+    email_cliente: "{{ reserva['email'] }}",
+    nombre: "{{ reserva['nombre'] }}",
+    fecha: "{{ reserva['fecha_evento'] }}",
+    hora: "{{ reserva['hora_evento'] }}",
+    telefono: "{{ reserva['telefono'] }}",
+    detalles: "{{ reserva['mensaje'] or 'Sin detalles adicionales' }}",
+    calendar_link: calendarLink
+  }).then(function() {
+    console.log('Correo enviado correctamente');
+  }, function(error) {
+    console.log('Error enviando correo:', error);
+  });
+})();
 </script>
 
 </body>
