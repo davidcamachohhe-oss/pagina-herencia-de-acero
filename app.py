@@ -167,77 +167,7 @@ def enviar_confirmacion_async(reserva):
     t = threading.Thread(target=_enviar, daemon=True)
     t.start()
 
-# Crear DB si no existe con tablas de auditoría
-if not os.path.exists(DB_FILE):
-    conn = get_db()
-    # Tabla de reservas
-    conn.execute("""CREATE TABLE IF NOT EXISTS reservas(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nombre TEXT NOT NULL,
-        email TEXT NOT NULL,
-        telefono TEXT NOT NULL,
-        fecha_evento TEXT NOT NULL,
-        hora_evento TEXT NOT NULL,
-        mensaje TEXT,
-        estado TEXT DEFAULT 'pendiente',
-        creado DATETIME DEFAULT CURRENT_TIMESTAMP,
-        actualizado DATETIME DEFAULT CURRENT_TIMESTAMP
-    )""")
-    
-    # Tabla de auditoría
-    conn.execute("""CREATE TABLE IF NOT EXISTS audit_log (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        accion TEXT NOT NULL,
-        usuario TEXT,
-        reserva_id INTEGER,
-        detalles TEXT,
-        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-        ip_address TEXT,
-        FOREIGN KEY (reserva_id) REFERENCES reservas(id)
-    )""")
 
-    # Tabla de testimonios
-    conn.execute("""CREATE TABLE IF NOT EXISTS testimonios (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nombre TEXT NOT NULL,
-        email TEXT NOT NULL,
-        tipo_evento TEXT,
-        calificacion INTEGER DEFAULT 5,
-        comentario TEXT NOT NULL,
-        estado TEXT DEFAULT 'pendiente',
-        creado DATETIME DEFAULT CURRENT_TIMESTAMP,
-        aprobado DATETIME
-    )""")
-    
-    conn.commit()
-    conn.close()
-    logger.info("Base de datos creada con tablas de auditoría")
-else:
-    # Asegurar que todas las tablas existan aunque la DB ya esté creada
-    conn = get_db()
-    conn.execute("""CREATE TABLE IF NOT EXISTS testimonios (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nombre TEXT NOT NULL,
-        email TEXT NOT NULL,
-        tipo_evento TEXT,
-        calificacion INTEGER DEFAULT 5,
-        comentario TEXT NOT NULL,
-        estado TEXT DEFAULT 'pendiente',
-        creado DATETIME DEFAULT CURRENT_TIMESTAMP,
-        aprobado DATETIME
-    )""")
-    conn.execute("""CREATE TABLE IF NOT EXISTS audit_log (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        accion TEXT NOT NULL,
-        usuario TEXT,
-        reserva_id INTEGER,
-        detalles TEXT,
-        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-        ip_address TEXT,
-        FOREIGN KEY (reserva_id) REFERENCES reservas(id)
-    )""")
-    conn.commit()
-    conn.close()
 
 
 @app.route('/')
