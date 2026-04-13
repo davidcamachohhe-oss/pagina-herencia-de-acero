@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from config import get_config
 from validators import *
+from db import get_db, row_to_dict, rows_to_dicts, init_db
 import bcrypt
 
 # Cargar variables de entorno
@@ -45,13 +46,14 @@ os.makedirs(DATA_DIR, exist_ok=True)
 # Inicializar correo
 mail = Mail(app)
 
-# Base de datos (usar carpeta data protegida)
-DB_FILE = os.path.join(DATA_DIR, 'reservas.db')
+# Inicializar base de datos PostgreSQL
+try:
+    init_db()
+except Exception as e:
+    logger.error(f"Error inicializando BD: {e}")
 
-def get_db():
-    conn = sqlite3.connect(DB_FILE)
-    conn.row_factory = sqlite3.Row
-    return conn
+# Base de datos (mantener DB_FILE para compatibilidad)
+DB_FILE = os.path.join(DATA_DIR, 'reservas.db')
 
 def generar_link_calendar(reserva):
     """Genera un link para agregar el evento a Google Calendar"""
@@ -90,12 +92,13 @@ def registrar_audit(accion, usuario, reserva_id, detalles='', ip_address=''):
     """Registrar operación en log de auditoría"""
     try:
         conn = get_db()
-        conn.execute("""
-            INSERT INTO audit_log 
-            (accion, usuario, reserva_id, detalles, timestamp, ip_address)
-            VALUES (?, ?, ?, ?, datetime('now'), ?)
+        cur = conn.cursor()
+        cur.execute("""
+            INSERT INTO audit_log (accion, usuario, reserva_id, detalles, ip_address)
+            VALUES (%s, %s, %s, %s, %s)
         """, (accion, usuario, reserva_id, detalles, ip_address))
         conn.commit()
+        cur.close()
         conn.close()
     except Exception as e:
         logger.error(f"Error en audit log: {e}")
@@ -240,7 +243,10 @@ else:
 @app.route('/')
 def index():
     conn = get_db()
-    total_eventos = conn.execute("SELECT COUNT(*) as count FROM reservas WHERE estado='confirmada'").fetchone()['count']
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(*) FROM reservas WHERE estado='confirmada'")
+    total_eventos = cur.fetchone()[0]
+    cur.close()
     conn.close()
     return render_template('index.html', total_eventos=total_eventos)
 
@@ -340,39 +346,41 @@ def reservar():
             detalle += f" | {mensaje}"
 
         conn = get_db()
+        cur = conn.cursor()
 
         # Verificar si ya existe una reserva en esa fecha y hora
-        existente = conn.execute("""
+        cur.execute("""
             SELECT id FROM reservas 
-            WHERE fecha_evento=? AND hora_evento=? AND estado != 'cancelada'
-        """, (fecha_evento, hora_evento)).fetchone()
+            WHERE fecha_evento=%s AND hora_evento=%s AND estado != 'cancelada'
+        """, (fecha_evento, hora_evento))
+        existente = cur.fetchone()
 
         if existente:
+            cur.close()
             conn.close()
             logger.warning(f"Fecha/hora ocupada: {fecha_evento} {hora_evento}")
             return render_template('reserva_ocupada.html', fecha=fecha_evento, hora=hora_evento)
 
         try:
-            cursor = conn.execute("""INSERT INTO reservas
+            cur.execute("""INSERT INTO reservas
                 (nombre,email,telefono,fecha_evento,hora_evento,mensaje)
-                VALUES (?,?,?,?,?,?)""",
+                VALUES (%s,%s,%s,%s,%s,%s) RETURNING id""",
                 (nombre, email, telefono, fecha_evento, hora_evento, detalle))
-            reserva_id = cursor.lastrowid
+            reserva_id = cur.fetchone()[0]
             conn.commit()
             
-            # Registrar en auditoría
             registrar_audit('CREAR_RESERVA', 'usuario', reserva_id, detalle, request.remote_addr)
-            
             logger.info(f"Reserva creada: ID={reserva_id}")
             
-            # Obtener datos de la reserva para email
-            reserva = conn.execute("SELECT * FROM reservas WHERE id=?", (reserva_id,)).fetchone()
+            cur.execute("SELECT * FROM reservas WHERE id=%s", (reserva_id,))
+            reserva = row_to_dict(cur, cur.fetchone())
         except Exception as e:
             conn.rollback()
             logger.error(f"Error insertando reserva: {e}")
             flash('❌ Error al guardar la reserva', 'error')
             return redirect(url_for('index'))
         finally:
+            cur.close()
             conn.close()
 
         # Enviar correo de confirmación en background (no bloquea)
@@ -398,13 +406,14 @@ def galeria():
 def testimonios():
     try:
         conn = get_db()
-        testimonios_list = conn.execute("""
+        cur = conn.cursor()
+        cur.execute("""
             SELECT nombre, calificacion, comentario, tipo_evento 
-            FROM testimonios 
-            WHERE estado = 'aprobado' 
-            ORDER BY aprobado DESC 
-            LIMIT 50
-        """).fetchall()
+            FROM testimonios WHERE estado = 'aprobado' 
+            ORDER BY aprobado DESC LIMIT 50
+        """)
+        testimonios_list = rows_to_dicts(cur, cur.fetchall())
+        cur.close()
         conn.close()
         return render_template('testimonios.html', testimonios=testimonios_list)
     except Exception as e:
@@ -430,7 +439,10 @@ def cobertura():
 @app.route('/disponibilidad')
 def disponibilidad():
     conn = get_db()
-    reservas = conn.execute("SELECT fecha_evento, hora_evento FROM reservas WHERE estado IN ('confirmada', 'pendiente')").fetchall()
+    cur = conn.cursor()
+    cur.execute("SELECT fecha_evento, hora_evento FROM reservas WHERE estado IN ('confirmada', 'pendiente')")
+    reservas = rows_to_dicts(cur, cur.fetchall())
+    cur.close()
     conn.close()
     fechas_ocupadas = [{'fecha': r['fecha_evento'], 'hora': r['hora_evento']} for r in reservas]
     return render_template('disponibilidad.html', fechas_ocupadas=fechas_ocupadas)
@@ -438,14 +450,20 @@ def disponibilidad():
 @app.route('/gracias')
 def gracias():
     conn = get_db()
-    total_eventos = conn.execute("SELECT COUNT(*) as count FROM reservas WHERE estado='confirmada'").fetchone()['count']
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(*) FROM reservas WHERE estado='confirmada'")
+    total_eventos = cur.fetchone()[0]
+    cur.close()
     conn.close()
     return render_template('gracias.html', total_eventos=total_eventos)
 
 @app.route('/pagos/<int:reserva_id>')
 def pagos(reserva_id):
     conn = get_db()
-    reserva = conn.execute("SELECT * FROM reservas WHERE id=?", (reserva_id,)).fetchone()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM reservas WHERE id=%s", (reserva_id,))
+    reserva = row_to_dict(cur, cur.fetchone())
+    cur.close()
     conn.close()
     
     if not reserva:
@@ -521,32 +539,34 @@ def admin_dashboard():
     
     try:
         conn = get_db()
-        pendientes = conn.execute("SELECT * FROM reservas WHERE estado='pendiente' ORDER BY fecha_evento ASC").fetchall()
-        confirmadas = conn.execute("SELECT * FROM reservas WHERE estado='confirmada' ORDER BY fecha_evento DESC").fetchall()
-        canceladas = conn.execute("SELECT * FROM reservas WHERE estado='cancelada' ORDER BY fecha_evento DESC").fetchall()
-        total = conn.execute("SELECT COUNT(*) as count FROM reservas").fetchone()
+        cur = conn.cursor()
+        pendientes = rows_to_dicts(cur, (cur.execute("SELECT * FROM reservas WHERE estado='pendiente' ORDER BY fecha_evento ASC"), cur.fetchall())[1])
+        confirmadas = rows_to_dicts(cur, (cur.execute("SELECT * FROM reservas WHERE estado='confirmada' ORDER BY fecha_evento DESC"), cur.fetchall())[1])
+        canceladas = rows_to_dicts(cur, (cur.execute("SELECT * FROM reservas WHERE estado='cancelada' ORDER BY fecha_evento DESC"), cur.fetchall())[1])
+        cur.execute("SELECT COUNT(*) FROM reservas")
+        total = cur.fetchone()[0]
 
-        # Estadísticas
         from datetime import date
         mes_actual = date.today().strftime('%Y-%m')
-        stats_tipo = conn.execute("""
-            SELECT mensaje, COUNT(*) as total FROM reservas 
-            WHERE estado='confirmada' GROUP BY 
+        cur.execute("""
+            SELECT COUNT(*) as total,
             CASE 
                 WHEN mensaje LIKE '%privado_ibague%' THEN 'Privado Ibague'
                 WHEN mensaje LIKE '%privado_fuera%' THEN 'Privado Fuera'
                 WHEN mensaje LIKE '%masivo_ibague%' THEN 'Masivo Ibague'
                 WHEN mensaje LIKE '%masivo_fuera%' THEN 'Masivo Fuera'
                 ELSE 'Otro'
-            END
-        """).fetchall()
-
+            END as tipo
+            FROM reservas WHERE estado='confirmada' GROUP BY tipo
+        """)
+        stats_tipo = rows_to_dicts(cur, cur.fetchall())
+        cur.close()
         conn.close()
         return render_template('admin_dashboard.html',
                              pendientes=pendientes,
                              confirmadas=confirmadas,
                              canceladas=canceladas,
-                             total=total['count'],
+                             total=total,
                              stats_tipo=stats_tipo,
                              mes_actual=mes_actual)
     except Exception as e:
@@ -561,14 +581,14 @@ def admin_confirmar(id):
     
     try:
         conn = get_db()
-        reserva = conn.execute("SELECT * FROM reservas WHERE id=?", (id,)).fetchone()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM reservas WHERE id=%s", (id,))
+        reserva = row_to_dict(cur, cur.fetchone())
         
         if reserva:
-            # Actualizar estado
-            conn.execute("UPDATE reservas SET estado='confirmada', actualizado=datetime('now') WHERE id=?", (id,))
+            cur.execute("UPDATE reservas SET estado='confirmada', actualizado=CURRENT_TIMESTAMP WHERE id=%s", (id,))
             conn.commit()
             
-            # Enviar correo en background (no bloquea el worker)
             try:
                 enviar_confirmacion_async(reserva)
                 envio_exitoso = True
@@ -576,21 +596,10 @@ def admin_confirmar(id):
                 logger.error(f"Error en enviar_confirmacion: {mail_err}")
                 envio_exitoso = False
 
-            # Notificación WhatsApp (link para enviar manualmente)
-            wa_msg = f"Hola {reserva['nombre']}, tu reserva con Herencia de Acero para el {reserva['fecha_evento']} a las {reserva['hora_evento']} ha sido CONFIRMADA. ¡Nos vemos pronto!"
-            from urllib.parse import quote
-            wa_link = f"https://wa.me/{reserva['telefono'].replace(' ','').replace('+','')}?text={quote(wa_msg)}"
-            
-            # Registrar en auditoría
             registrar_audit('CONFIRMAR_RESERVA', session.get('admin_user'), id, f"Confirmada {reserva['nombre']}", request.remote_addr)
-            
-            if envio_exitoso:
-                logger.info(f"Reserva confirmada y correo enviado: ID={id}")
-                flash(f'✓ Reserva de {reserva["nombre"]} confirmada', 'success')
-            else:
-                logger.warning(f"Reserva confirmada pero correo falló: ID={id}")
-                flash(f'✓ Reserva de {reserva["nombre"]} confirmada', 'success')
+            flash(f'✓ Reserva de {reserva["nombre"]} confirmada', 'success')
         
+        cur.close()
         conn.close()
     except Exception as e:
         logger.error(f"Error confirmando reserva: {e}")
@@ -605,13 +614,16 @@ def admin_eliminar(id):
         return redirect(url_for('admin'))
     
     conn = get_db()
-    reserva = conn.execute("SELECT * FROM reservas WHERE id=?", (id,)).fetchone()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM reservas WHERE id=%s", (id,))
+    reserva = row_to_dict(cur, cur.fetchone())
     
     if reserva:
-        conn.execute("DELETE FROM reservas WHERE id=?", (id,))
+        cur.execute("DELETE FROM reservas WHERE id=%s", (id,))
         conn.commit()
         flash(f'✓ Reserva de {reserva["nombre"]} eliminada correctamente', 'success')
     
+    cur.close()
     conn.close()
     return redirect(url_for('admin_dashboard'))
 
@@ -620,11 +632,14 @@ def admin_cancelar(id):
     if not session.get('admin_logged'):
         return redirect(url_for('admin'))
     conn = get_db()
-    reserva = conn.execute("SELECT * FROM reservas WHERE id=?", (id,)).fetchone()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM reservas WHERE id=%s", (id,))
+    reserva = row_to_dict(cur, cur.fetchone())
     if reserva:
-        conn.execute("UPDATE reservas SET estado='cancelada' WHERE id=?", (id,))
+        cur.execute("UPDATE reservas SET estado='cancelada' WHERE id=%s", (id,))
         conn.commit()
         flash(f'✓ Reserva de {reserva["nombre"]} cancelada', 'warning')
+    cur.close()
     conn.close()
     return redirect(url_for('admin_dashboard'))
 
@@ -635,7 +650,10 @@ def admin_exportar():
     import csv, io
     from flask import Response
     conn = get_db()
-    reservas = conn.execute("SELECT * FROM reservas ORDER BY fecha_evento DESC").fetchall()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM reservas ORDER BY fecha_evento DESC")
+    reservas = rows_to_dicts(cur, cur.fetchall())
+    cur.close()
     conn.close()
     output = io.StringIO()
     writer = csv.writer(output)
@@ -659,10 +677,16 @@ def admin_exportar_pdf():
         import io
         
         conn = get_db()
-        reservas = conn.execute("SELECT * FROM reservas ORDER BY fecha_evento DESC").fetchall()
-        confirmadas = conn.execute("SELECT COUNT(*) as count FROM reservas WHERE estado='confirmada'").fetchone()['count']
-        pendientes = conn.execute("SELECT COUNT(*) as count FROM reservas WHERE estado='pendiente'").fetchone()['count']
-        total = conn.execute("SELECT COUNT(*) as count FROM reservas").fetchone()['count']
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM reservas ORDER BY fecha_evento DESC")
+        reservas = rows_to_dicts(cur, cur.fetchall())
+        cur.execute("SELECT COUNT(*) FROM reservas WHERE estado='confirmada'")
+        confirmadas = cur.fetchone()[0]
+        cur.execute("SELECT COUNT(*) FROM reservas WHERE estado='pendiente'")
+        pendientes_count = cur.fetchone()[0]
+        cur.execute("SELECT COUNT(*) FROM reservas")
+        total = cur.fetchone()[0]
+        cur.close()
         conn.close()
         
         buffer = io.BytesIO()
@@ -681,7 +705,7 @@ def admin_exportar_pdf():
         stats_data = [
             ['Total Reservas', f'{total}'],
             ['Confirmadas', f'{confirmadas}'],
-            ['Pendientes', f'{pendientes}']
+            ['Pendientes', f'{pendientes_count}']
         ]
         stats_table = Table(stats_data, colWidths=[3*inch, 1.5*inch])
         stats_table.setStyle(TableStyle([
@@ -762,12 +786,14 @@ def enviar_testimonio():
         
         # Guardar en BD
         conn = get_db()
-        conn.execute("""
+        cur = conn.cursor()
+        cur.execute("""
             INSERT INTO testimonios 
             (nombre, email, tipo_evento, calificacion, comentario, estado)
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s, %s)
         """, (nombre, email, tipo_evento, calificacion, comentario, 'pendiente'))
         conn.commit()
+        cur.close()
         conn.close()
         
         logger.info(f"✅ Testimonio recibido de {nombre} ({email})")
@@ -784,21 +810,18 @@ def admin_testimonios():
         return redirect(url_for('admin'))
     try:
         conn = get_db()
-        testimonios_pendientes = conn.execute("""
+        cur = conn.cursor()
+        cur.execute("""
             SELECT id, nombre, email, tipo_evento, calificacion, comentario, creado 
-            FROM testimonios 
-            WHERE estado = 'pendiente' 
-            ORDER BY creado DESC
-        """).fetchall()
-        
-        testimonios_aprobados = conn.execute("""
+            FROM testimonios WHERE estado = 'pendiente' ORDER BY creado DESC
+        """)
+        testimonios_pendientes = rows_to_dicts(cur, cur.fetchall())
+        cur.execute("""
             SELECT id, nombre, email, tipo_evento, calificacion, comentario, aprobado 
-            FROM testimonios 
-            WHERE estado = 'aprobado' 
-            ORDER BY aprobado DESC 
-            LIMIT 20
-        """).fetchall()
-        
+            FROM testimonios WHERE estado = 'aprobado' ORDER BY aprobado DESC LIMIT 20
+        """)
+        testimonios_aprobados = rows_to_dicts(cur, cur.fetchall())
+        cur.close()
         conn.close()
         return render_template('admin_testimonios.html', 
                              testimonios_pendientes=testimonios_pendientes,
@@ -815,16 +838,14 @@ def admin_aprobar_testimonio(id):
         return {'success': False}, 401
     try:
         conn = get_db()
-        conn.execute("""
-            UPDATE testimonios 
-            SET estado = 'aprobado', aprobado = datetime('now')
-            WHERE id = ?
+        cur = conn.cursor()
+        cur.execute("""
+            UPDATE testimonios SET estado = 'aprobado', aprobado = CURRENT_TIMESTAMP WHERE id = %s
         """, (id,))
         conn.commit()
+        cur.close()
         conn.close()
-        
         registrar_audit('TESTIMONIO_APROBADO', session.get('admin_user', 'admin'), id, f'Testimonio #{id} aprobado', request.remote_addr)
-        logger.info(f"✅ Testimonio #{id} aprobado")
         return {'success': True, 'message': 'Testimonio aprobado'}, 200
     except Exception as e:
         logger.error(f"Error aprobando testimonio: {e}")
@@ -832,20 +853,16 @@ def admin_aprobar_testimonio(id):
 
 @app.route('/admin/rechazar_testimonio/<int:id>', methods=['POST'])
 def admin_rechazar_testimonio(id):
-    """Rechazar un testimonio"""
     if not session.get('admin_logged'):
         return {'success': False}, 401
     try:
         conn = get_db()
-        conn.execute("""
-            DELETE FROM testimonios 
-            WHERE id = ?
-        """, (id,))
+        cur = conn.cursor()
+        cur.execute("DELETE FROM testimonios WHERE id = %s", (id,))
         conn.commit()
+        cur.close()
         conn.close()
-        
         registrar_audit('TESTIMONIO_RECHAZADO', session.get('admin_user', 'admin'), id, f'Testimonio #{id} rechazado', request.remote_addr)
-        logger.info(f"✅ Testimonio #{id} rechazado")
         return {'success': True, 'message': 'Testimonio rechazado'}, 200
     except Exception as e:
         logger.error(f"Error rechazando testimonio: {e}")
