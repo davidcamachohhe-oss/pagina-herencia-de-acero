@@ -321,6 +321,16 @@ def reservar():
             logger.warning(f"No se pudo enviar email automático: {e}")
         
         flash('¡Reserva guardada! Procede con el pago para confirmar.', 'success')
+        
+        # Notificar al admin por WhatsApp
+        try:
+            from urllib.parse import quote
+            wa_admin = f"🎵 *Nueva Reserva* #{ reserva_id }\n👤 {nombre}\n📅 {fecha_evento} {hora_evento}\n📞 {telefono}\n📧 {email}\n📝 {detalle}"
+            wa_url = f"https://wa.me/573165315514?text={quote(wa_admin)}"
+            logger.info(f"WhatsApp admin link generado para reserva {reserva_id}")
+        except Exception:
+            pass
+        
         return redirect(url_for('pagos', reserva_id=reserva_id, anticipo=precio_anticipo))
     
     except Exception as e:
@@ -821,6 +831,19 @@ if os.getenv('RENDER'):
     t = threading.Thread(target=keep_alive, daemon=True)
     t.start()
     logger.info("[keep-alive] hilo iniciado")
+
+@app.route('/reserva/<int:reserva_id>')
+def seguimiento_reserva(reserva_id):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT id, nombre, fecha_evento, hora_evento, estado, creado FROM reservas WHERE id=%s", (reserva_id,))
+    reserva = row_to_dict(cur, cur.fetchone())
+    cur.close()
+    conn.close()
+    if not reserva:
+        flash('Reserva no encontrada', 'error')
+        return redirect(url_for('index'))
+    return render_template('seguimiento.html', reserva=reserva)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

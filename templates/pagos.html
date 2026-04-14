@@ -406,7 +406,7 @@ header p {
       <p>• Después de realizar el pago, envía el comprobante por WhatsApp</p>
       <p>• Tu reserva será confirmada una vez verifiquemos el pago</p>
       <p>• Recibirás un correo de confirmación a: <strong>{{ reserva['email'] }}</strong></p>
-      <p>• Guarda tu número de reserva: <strong>#{{ reserva['id'] }}</strong></p>
+      <p>• Guarda tu número de reserva: <strong>#{{ reserva['id'] }}</strong> — <a href="/reserva/{{ reserva['id'] }}" style="color:#d4af37;">Ver estado</a></p>
     </div>
 
     <div class="whatsapp-contact">

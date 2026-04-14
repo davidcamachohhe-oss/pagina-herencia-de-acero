@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estado de Reserva #{{ reserva['id'] }} - Herencia de Acero</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #0f0f0f, #1a1a2e); color: #fff; min-height: 100vh; padding: 40px 20px; }
+    .container { max-width: 600px; margin: auto; }
+    .card { background: rgba(26,26,46,0.9); border: 2px solid #d4af37; border-radius: 16px; padding: 40px; text-align: center; }
+    h1 { color: #d4af37; font-size: 1.8rem; margin-bottom: 10px; }
+    .reserva-id { color: #bbb; margin-bottom: 30px; }
+    .estado { display: inline-block; padding: 10px 24px; border-radius: 999px; font-weight: 700; font-size: 1.1rem; margin-bottom: 30px; }
+    .estado.pendiente { background: rgba(255,193,7,0.2); color: #ffc107; border: 2px solid #ffc107; }
+    .estado.confirmada { background: rgba(40,167,69,0.2); color: #28a745; border: 2px solid #28a745; }
+    .estado.cancelada { background: rgba(220,53,69,0.2); color: #dc3545; border: 2px solid #dc3545; }
+    .info { background: rgba(212,175,55,0.1); border-left: 4px solid #d4af37; border-radius: 8px; padding: 20px; text-align: left; margin-bottom: 25px; }
+    .info p { margin: 8px 0; color: #ddd; }
+    .info strong { color: #d4af37; }
+    .steps { display: flex; justify-content: space-between; margin: 30px 0; position: relative; }
+    .steps::before { content: ''; position: absolute; top: 20px; left: 10%; right: 10%; height: 2px; background: rgba(212,175,55,0.3); }
+    .step { text-align: center; flex: 1; position: relative; z-index: 1; }
+    .step-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 1rem; }
+    .step-icon.done { background: #d4af37; color: #000; }
+    .step-icon.active { background: #28a745; color: #fff; }
+    .step-icon.pending { background: rgba(255,255,255,0.1); color: #666; border: 2px solid rgba(255,255,255,0.2); }
+    .step p { font-size: 0.75rem; color: #bbb; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 8px; transition: all 0.3s; }
+    .btn-gold { background: linear-gradient(135deg, #d4af37, #e8c547); color: #000; }
+    .btn-wa { background: #25D366; color: #fff; }
+    .btn:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>🎵 Estado de tu Reserva</h1>
+      <p class="reserva-id">Reserva #{{ reserva['id'] }}</p>
+
+      <div class="estado {{ reserva['estado'] }}">
+        {% if reserva['estado'] == 'pendiente' %}⏳ Pendiente de confirmación
+        {% elif reserva['estado'] == 'confirmada' %}✅ Confirmada
+        {% else %}❌ Cancelada{% endif %}
+      </div>
+
+      <div class="info">
+        <p><strong>👤 Nombre:</strong> {{ reserva['nombre'] }}</p>
+        <p><strong>📅 Fecha:</strong> {{ reserva['fecha_evento'] }}</p>
+        <p><strong>⏰ Hora:</strong> {{ reserva['hora_evento'] }}</p>
+        <p><strong>📋 Creada:</strong> {{ reserva['creado'] }}</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-icon done"><i class="fas fa-check"></i></div>
+          <p>Reserva<br>recibida</p>
+        </div>
+        <div class="step">
+          <div class="step-icon {{ 'done' if reserva['estado'] in ['confirmada'] else 'pending' }}">
+            <i class="fas fa-{{ 'check' if reserva['estado'] == 'confirmada' else 'clock' }}"></i>
+          </div>
+          <p>Pago<br>verificado</p>
+        </div>
+        <div class="step">
+          <div class="step-icon {{ 'active' if reserva['estado'] == 'confirmada' else 'pending' }}">
+            <i class="fas fa-{{ 'star' if reserva['estado'] == 'confirmada' else 'music' }}"></i>
+          </div>
+          <p>Evento<br>confirmado</p>
+        </div>
+      </div>
+
+      <a href="/" class="btn btn-gold"><i class="fas fa-home"></i> Inicio</a>
+      <a href="https://wa.me/573165315514?text=Hola,%20quiero%20consultar%20el%20estado%20de%20mi%20reserva%20%23{{ reserva['id'] }}" target="_blank" class="btn btn-wa">
+        <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
+      </a>
+    </div>
+  </div>
+</body>
+</html>
