@@ -176,9 +176,13 @@ def index():
     cur = conn.cursor()
     cur.execute("SELECT COUNT(*) FROM reservas WHERE estado='confirmada'")
     total_eventos = cur.fetchone()[0]
+    cur.execute("""SELECT nombre, calificacion, comentario, tipo_evento 
+                   FROM testimonios WHERE estado='aprobado' 
+                   ORDER BY aprobado DESC LIMIT 6""")
+    testimonios = rows_to_dicts(cur, cur.fetchall())
     cur.close()
     conn.close()
-    return render_template('index.html', total_eventos=total_eventos)
+    return render_template('index.html', total_eventos=total_eventos, testimonios=testimonios)
 
 @app.route('/reservar', methods=['POST'])
 @limiter.limit("10 per hour")  # Límite de intentos
@@ -319,18 +323,25 @@ def reservar():
             registrar_audit('EMAIL_CONFIRMACION', 'usuario', reserva_id, f"Email enviado a {email}", request.remote_addr)
         except Exception as e:
             logger.warning(f"No se pudo enviar email automático: {e}")
+
+        # Notificar al admin por WhatsApp via CallMeBot (automático)
+        def notificar_admin_whatsapp():
+            try:
+                import urllib.request
+                from urllib.parse import quote
+                apikey = os.getenv('CALLMEBOT_APIKEY', '')
+                if not apikey:
+                    return
+                msg = f"🎵 Nueva Reserva #{reserva_id}\n👤 {nombre}\n📅 {fecha_evento} {hora_evento}\n📞 {telefono}\n📧 {email}"
+                url = f"https://api.callmebot.com/whatsapp.php?phone=573165315514&text={quote(msg)}&apikey={apikey}"
+                urllib.request.urlopen(url, timeout=10)
+                logger.info(f"Notificación WhatsApp enviada al admin para reserva {reserva_id}")
+            except Exception as e:
+                logger.warning(f"No se pudo notificar al admin por WhatsApp: {e}")
+        
+        threading.Thread(target=notificar_admin_whatsapp, daemon=True).start()
         
         flash('¡Reserva guardada! Procede con el pago para confirmar.', 'success')
-        
-        # Notificar al admin por WhatsApp
-        try:
-            from urllib.parse import quote
-            wa_admin = f"🎵 *Nueva Reserva* #{ reserva_id }\n👤 {nombre}\n📅 {fecha_evento} {hora_evento}\n📞 {telefono}\n📧 {email}\n📝 {detalle}"
-            wa_url = f"https://wa.me/573165315514?text={quote(wa_admin)}"
-            logger.info(f"WhatsApp admin link generado para reserva {reserva_id}")
-        except Exception:
-            pass
-        
         return redirect(url_for('pagos', reserva_id=reserva_id, anticipo=precio_anticipo))
     
     except Exception as e:
