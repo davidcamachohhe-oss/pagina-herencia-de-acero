@@ -63,3 +63,23 @@ Thumbs.db
 # Credenciales
 credentials.json
 token.pickle
+
+# Ejecutables y archivos binarios no deseados
+*.exe
+*.msi
+*.dmg
+*.pkg
+*.deb
+*.rpm
+*.apk
+*.zip
+*.rar
+*.7z
+*.tar.gz
+
+# Videos y archivos multimedia pesados (usar YouTube en su lugar)
+static/*.mp4
+static/*.mov
+static/*.avi
+static/*.mkv
+static/*.wmv
